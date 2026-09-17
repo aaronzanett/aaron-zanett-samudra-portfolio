@@ -1,0 +1,7 @@
+:root{
+  --ease-editorial:cubic-bezier(.22,.61,.36,1); /* @kind other */
+  --dur-fast:140ms; /* @kind other */
+  --dur-base:260ms; /* @kind other */
+  --dur-slow:520ms; /* @kind other */
+  --hover-shift:2px;
+}

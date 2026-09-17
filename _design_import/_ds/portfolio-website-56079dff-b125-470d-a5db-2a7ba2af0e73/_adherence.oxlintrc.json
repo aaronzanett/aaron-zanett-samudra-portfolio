@@ -1,0 +1,273 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "components/core/**",
+              "components/site/**",
+              "ui_kits/portfolio/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Bodoni Moda|Archivo))/i]",
+        "message": "Font not provided by the design system. Available: Bodoni Moda, Archivo."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Button'] > JSXAttribute > JSXIdentifier[name!=/^(?:variant|size|as|index|disabled|children|key|ref|className|style|children)$/]",
+        "message": "<Button> doesn't accept that prop. Declared props: variant, size, as, index, disabled, children."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Button'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:ink|cream|amber|red|ghost)$/]",
+        "message": "<Button> variant must be one of 'ink' | 'cream' | 'amber' | 'red' | 'ghost'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Button'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:sm|md|lg)$/]",
+        "message": "<Button> size must be one of 'sm' | 'md' | 'lg'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Button'] > JSXAttribute[name.name='as'] > Literal[value!=/^(?:button|a)$/]",
+        "message": "<Button> as must be one of 'button' | 'a'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='DisplayRow'] > JSXAttribute > JSXIdentifier[name!=/^(?:left|right|center|size|rule|key|ref|className|style|children)$/]",
+        "message": "<DisplayRow> doesn't accept that prop. Declared props: left, right, center, size, rule."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Label'] > JSXAttribute > JSXIdentifier[name!=/^(?:as|tone|children|key|ref|className|style|children)$/]",
+        "message": "<Label> doesn't accept that prop. Declared props: as, tone, children."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Label'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:primary|muted|inverse)$/]",
+        "message": "<Label> tone must be one of 'primary' | 'muted' | 'inverse'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MetaBarItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|href|key|ref|className|style|children)$/]",
+        "message": "<MetaBarItem> doesn't accept that prop. Declared props: label, href."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavTile'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|index|tone|height|key|ref|className|style|children)$/]",
+        "message": "<NavTile> doesn't accept that prop. Declared props: label, index, tone, height."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavTile'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:cream|amber|red|ink)$/]",
+        "message": "<NavTile> tone must be one of 'cream' | 'amber' | 'red' | 'ink'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Rule'] > JSXAttribute > JSXIdentifier[name!=/^(?:tone|key|ref|className|style|children)$/]",
+        "message": "<Rule> doesn't accept that prop. Declared props: tone."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Rule'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:soft|ink)$/]",
+        "message": "<Rule> tone must be one of 'soft' | 'ink'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Wordmark'] > JSXAttribute > JSXIdentifier[name!=/^(?:first|last|size|split|key|ref|className|style|children)$/]",
+        "message": "<Wordmark> doesn't accept that prop. Declared props: first, last, size, split."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {
+      "Button": {
+        "replaces": []
+      },
+      "DisplayRow": {
+        "replaces": []
+      },
+      "Label": {
+        "replaces": []
+      },
+      "MetaBarItem": {
+        "replaces": []
+      },
+      "NavTile": {
+        "replaces": []
+      },
+      "Rule": {
+        "replaces": []
+      },
+      "Wordmark": {
+        "replaces": []
+      }
+    },
+    "tokens": [
+      "--amber-500",
+      "--amber-600",
+      "--clay-100",
+      "--clay-200",
+      "--clay-300",
+      "--clay-400",
+      "--cream-100",
+      "--cream-200",
+      "--dur-base",
+      "--dur-fast",
+      "--dur-slow",
+      "--ease-editorial",
+      "--focus-ring",
+      "--font-display",
+      "--font-grotesk",
+      "--gutter",
+      "--hairline",
+      "--hairline-ink",
+      "--hover-shift",
+      "--ink-500",
+      "--ink-700",
+      "--ink-900",
+      "--page-inset",
+      "--radius-none",
+      "--radius-page",
+      "--radius-panel",
+      "--radius-panel-lg",
+      "--red-500",
+      "--red-600",
+      "--row-pad-y",
+      "--rule",
+      "--rule-strong",
+      "--shadow-none",
+      "--space-1",
+      "--space-10",
+      "--space-2",
+      "--space-3",
+      "--space-4",
+      "--space-5",
+      "--space-6",
+      "--space-7",
+      "--space-8",
+      "--space-9",
+      "--surface-amber",
+      "--surface-cream",
+      "--surface-page",
+      "--surface-raised",
+      "--surface-red",
+      "--text-muted",
+      "--text-on-amber",
+      "--text-on-red",
+      "--text-primary",
+      "--text-secondary",
+      "--type-body",
+      "--type-body-lh",
+      "--type-display-1",
+      "--type-display-2",
+      "--type-display-lh",
+      "--type-display-tracking",
+      "--type-label",
+      "--type-label-tracking",
+      "--type-label-weight",
+      "--type-lead",
+      "--type-small",
+      "--type-wordmark-lh",
+      "--type-wordmark-size",
+      "--type-wordmark-tracking"
+    ],
+    "tokenKinds": {
+      "--clay-100": "color",
+      "--clay-200": "color",
+      "--clay-300": "color",
+      "--clay-400": "color",
+      "--ink-900": "color",
+      "--ink-700": "color",
+      "--ink-500": "color",
+      "--cream-100": "color",
+      "--cream-200": "color",
+      "--amber-500": "color",
+      "--amber-600": "color",
+      "--red-500": "color",
+      "--red-600": "color",
+      "--surface-page": "color",
+      "--surface-raised": "color",
+      "--surface-cream": "color",
+      "--surface-amber": "color",
+      "--surface-red": "color",
+      "--text-primary": "font",
+      "--text-secondary": "font",
+      "--text-muted": "font",
+      "--text-on-red": "font",
+      "--text-on-amber": "font",
+      "--rule": "color",
+      "--rule-strong": "color",
+      "--focus-ring": "color",
+      "--font-display": "font",
+      "--font-grotesk": "font",
+      "--type-wordmark-size": "font",
+      "--type-wordmark-lh": "font",
+      "--type-wordmark-tracking": "font",
+      "--type-display-1": "font",
+      "--type-display-2": "font",
+      "--type-display-lh": "font",
+      "--type-display-tracking": "font",
+      "--type-lead": "font",
+      "--type-body": "font",
+      "--type-body-lh": "font",
+      "--type-small": "font",
+      "--type-label": "font",
+      "--type-label-tracking": "font",
+      "--type-label-weight": "font",
+      "--space-1": "spacing",
+      "--space-2": "spacing",
+      "--space-3": "spacing",
+      "--space-4": "spacing",
+      "--space-5": "spacing",
+      "--space-6": "spacing",
+      "--space-7": "spacing",
+      "--space-8": "spacing",
+      "--space-9": "spacing",
+      "--space-10": "spacing",
+      "--gutter": "spacing",
+      "--page-inset": "spacing",
+      "--row-pad-y": "spacing",
+      "--hairline": "color",
+      "--hairline-ink": "color",
+      "--radius-none": "radius",
+      "--radius-panel": "radius",
+      "--radius-panel-lg": "radius",
+      "--radius-page": "radius",
+      "--shadow-none": "shadow",
+      "--ease-editorial": "other",
+      "--dur-fast": "other",
+      "--dur-base": "other",
+      "--dur-slow": "other",
+      "--hover-shift": "spacing"
+    },
+    "fontFamilies": [
+      "Archivo",
+      "Bodoni Moda"
+    ]
+  }
+}

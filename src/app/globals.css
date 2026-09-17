@@ -1,26 +1,114 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "../styles/tokens.css";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Expose the design-system palette as Tailwind color utilities
+     (bg-ink-900, text-cream-100, etc.) while --ink-900 etc. in
+     tokens.css stay the single source of truth for the values. */
+  --color-clay-100: var(--clay-100);
+  --color-clay-200: var(--clay-200);
+  --color-clay-300: var(--clay-300);
+  --color-clay-400: var(--clay-400);
+  --color-ink-900: var(--ink-900);
+  --color-ink-700: var(--ink-700);
+  --color-ink-500: var(--ink-500);
+  --color-cream-100: var(--cream-100);
+  --color-cream-200: var(--cream-200);
+  --color-amber-500: var(--amber-500);
+  --color-amber-600: var(--amber-600);
+  --color-red-500: var(--red-500);
+  --color-red-600: var(--red-600);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-display);
+  --font-grotesk: var(--font-grotesk);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--clay-300);
+  color: var(--text-primary);
+  font-family: var(--font-grotesk);
+  font-size: var(--type-body);
+  line-height: var(--type-body-lh);
+}
+
+a {
+  color: var(--text-primary);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  transition: opacity var(--dur-fast) var(--ease-editorial);
+}
+
+a:hover {
+  opacity: 0.55;
+}
+
+::selection {
+  background: var(--amber-500);
+  color: var(--ink-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Shared entrance keyframes, reused across scenes. */
+@keyframes om-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes om-wipe {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes om-caret {
+  0%,
+  48% {
+    opacity: 1;
+  }
+  52%,
+  100% {
+    opacity: 0;
+  }
+}
+
+[data-enter] {
+  animation: om-rise var(--dur-slow) var(--ease-editorial) both;
+}
+[data-enter="2"] {
+  animation-delay: 180ms;
+}
+[data-enter="3"] {
+  animation-delay: 320ms;
+}
+[data-enter="rule"] {
+  animation: om-wipe var(--dur-slow) var(--ease-editorial) 240ms both;
+  transform-origin: left;
+}
+[data-caret] {
+  animation: om-caret 1.1s steps(1, end) infinite;
 }

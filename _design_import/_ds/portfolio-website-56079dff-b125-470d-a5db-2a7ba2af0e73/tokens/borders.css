@@ -1,0 +1,9 @@
+:root{
+  --hairline:1px solid var(--rule);
+  --hairline-ink:1px solid var(--rule-strong);
+  --radius-none:0;
+  --radius-panel:0 0 20px 0;      /* single soft corner — the site's signature */
+  --radius-panel-lg:0 0 28px 0;
+  --radius-page:22px;
+  --shadow-none:none;             /* the system is shadowless by design */
+}

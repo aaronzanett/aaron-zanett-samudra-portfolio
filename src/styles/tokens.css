@@ -1,0 +1,98 @@
+/*
+  Design tokens — ported 1:1 from the Claude Design export
+  (Souville Editorial Design System). Values are the source of truth;
+  Tailwind's @theme block in globals.css re-exposes a subset of these
+  as utility classes, but every value here is authoritative.
+*/
+
+:root {
+  /* Base palette */
+  --clay-100: #d6d5cd;
+  --clay-200: #c1c0b6;
+  --clay-300: #b2b2a8;
+  --clay-400: #9a9a90;
+  --ink-900: #3f3b37;
+  --ink-700: #5b5650;
+  --ink-500: #7c766e;
+  --cream-100: #fbefdf;
+  --cream-200: #f2e3cd;
+  --amber-500: #e7aa2c;
+  --amber-600: #cf9520;
+  --red-500: #db4c44;
+  --red-600: #c53f38;
+
+  /* Semantic colors */
+  --surface-page: var(--clay-200);
+  --surface-raised: var(--clay-100);
+  --surface-cream: var(--cream-100);
+  --surface-amber: var(--amber-500);
+  --surface-red: var(--red-500);
+  --text-primary: var(--ink-900);
+  --text-secondary: var(--ink-700);
+  --text-muted: var(--ink-500);
+  --text-on-red: var(--cream-100);
+  --text-on-amber: var(--ink-900);
+  --rule: var(--clay-300);
+  --rule-strong: var(--ink-900);
+  --focus-ring: var(--ink-900);
+
+  /* Fonts — real font files loaded via next/font/google in layout.tsx;
+     these are the reference site's substitutes (see design-system readme):
+     a licensed high-contrast display italic + a Helvetica-class grotesk. */
+  --font-display: var(--font-bodoni-moda), Didot, "Times New Roman", serif;
+  --font-grotesk: var(--font-archivo), "Helvetica Neue", Helvetica, sans-serif;
+
+  /* Type scale */
+  --type-wordmark-size: clamp(3.5rem, 11vw, 10.5rem);
+  --type-wordmark-lh: 0.86;
+  --type-wordmark-tracking: -0.01em;
+  --type-display-1: clamp(3rem, 9.5vw, 9rem);
+  --type-display-2: clamp(2.25rem, 6.5vw, 6rem);
+  --type-display-lh: 0.9;
+  --type-display-tracking: -0.035em;
+  --type-lead: clamp(1.125rem, 1.6vw, 1.5rem);
+  --type-body: 1rem;
+  --type-body-lh: 1.5;
+  --type-small: 0.875rem;
+  --type-label: 0.6875rem;
+  --type-label-tracking: 0.09em;
+  --type-label-weight: 700;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 144px;
+  --gutter: clamp(16px, 3.2vw, 56px);
+  --page-inset: clamp(12px, 1.6vw, 28px);
+  --row-pad-y: 10px;
+
+  /* Borders */
+  --hairline: 1px solid var(--rule);
+  --hairline-ink: 1px solid var(--rule-strong);
+  --radius-none: 0;
+  --radius-panel: 0 0 20px 0;
+  --radius-panel-lg: 0 0 28px 0;
+  --radius-page: 22px;
+  --shadow-none: none;
+
+  /* Motion */
+  --ease-editorial: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 140ms;
+  --dur-base: 260ms;
+  --dur-slow: 520ms;
+  --hover-shift: 2px;
+
+  /* Layout */
+  --hdr: 58px;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+}

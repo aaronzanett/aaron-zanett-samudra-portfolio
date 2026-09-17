@@ -1,0 +1,25 @@
+:root{
+  --font-display:"Bodoni Moda",Didot,"Times New Roman",serif;
+  --font-grotesk:"Archivo","Helvetica Neue",Helvetica,sans-serif;
+
+  /* Wordmark / editorial serif */
+  --type-wordmark-size:clamp(3.5rem,11vw,10.5rem);
+  --type-wordmark-lh:0.86;
+  --type-wordmark-tracking:-0.01em;
+
+  /* Grotesk display stack */
+  --type-display-1:clamp(3rem,9.5vw,9rem);
+  --type-display-2:clamp(2.25rem,6.5vw,6rem);
+  --type-display-lh:0.9;
+  --type-display-tracking:-0.035em;
+
+  --type-lead:clamp(1.125rem,1.6vw,1.5rem);
+  --type-body:1rem;
+  --type-body-lh:1.5;
+  --type-small:0.875rem;
+
+  /* Micro label — the site's connective tissue */
+  --type-label:0.6875rem;
+  --type-label-tracking:0.09em;
+  --type-label-weight:700;
+}

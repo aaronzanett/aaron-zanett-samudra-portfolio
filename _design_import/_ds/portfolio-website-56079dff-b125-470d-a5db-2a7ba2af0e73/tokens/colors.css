@@ -1,0 +1,23 @@
+:root{
+  /* Base palette — sampled from the reference site */
+  --clay-100:#d6d5cd; --clay-200:#c1c0b6; --clay-300:#b2b2a8; --clay-400:#9a9a90;
+  --ink-900:#3f3b37; --ink-700:#5b5650; --ink-500:#7c766e;
+  --cream-100:#fbefdf; --cream-200:#f2e3cd;
+  --amber-500:#e7aa2c; --amber-600:#cf9520;
+  --red-500:#db4c44; --red-600:#c53f38;
+
+  /* Semantic */
+  --surface-page:var(--clay-200);
+  --surface-raised:var(--clay-100);
+  --surface-cream:var(--cream-100);
+  --surface-amber:var(--amber-500);
+  --surface-red:var(--red-500);
+  --text-primary:var(--ink-900);
+  --text-secondary:var(--ink-700);
+  --text-muted:var(--ink-500);
+  --text-on-red:var(--cream-100);
+  --text-on-amber:var(--ink-900);
+  --rule:var(--clay-300);
+  --rule-strong:var(--ink-900);
+  --focus-ring:var(--ink-900);
+}

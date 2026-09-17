@@ -1,0 +1,5 @@
+html{-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--clay-300);color:var(--text-primary);font-family:var(--font-grotesk);font-size:var(--type-body);line-height:var(--type-body-lh)}
+a{color:var(--text-primary);text-decoration:none;border-bottom:1px solid currentColor;transition:opacity var(--dur-fast) var(--ease-editorial)}
+a:hover{opacity:.55}
+::selection{background:var(--amber-500);color:var(--ink-900)}

@@ -1,5 +1,3 @@
-@AGENTS.md
-
 # claude.md — Project Guide
 
 Operating rules for this repository. **Binding.** `PRD.md` defines *what* to build; this file defines *how* to build it. When they appear to conflict, ask before proceeding.
@@ -154,10 +152,3 @@ The site carries animation, video, and interactive media, so performance is a co
 - [ ] Loading and error states handled
 - [ ] Transition into the next scene preserves narrative continuity
 - [ ] No console errors or warnings
-
----
-
-## Build log
-
-- **Scene 01 (The Idea) — done.** Pinned/sticky 4-stage scroll-scrubbed crossfade (`useStagedScrub` in `lib/animation/`), reused for future scenes. Mobile breakpoint overrides ported from the design export at ≤720px. Reduced-motion renders a static stacked layout instead of the pinned crossfade.
-- Scenes 02–06: not yet built. See `PRD.md` and the design export spec for content.
