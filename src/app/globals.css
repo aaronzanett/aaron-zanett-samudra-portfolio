@@ -723,3 +723,38 @@ a:hover {
     color: var(--cream-100);
   }
 }
+
+/* Scene 03 — workflow row tiles rise in once revealed; "chaos" rows also
+   settle out of a small alternating tilt, "zero" rows pop their first tile
+   in from near-nothing, echoing the source design's three reveal styles. */
+[data-row-tile] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 420ms var(--ease-editorial),
+    transform 420ms var(--ease-editorial);
+}
+[data-row-revealed] [data-row-tile] {
+  opacity: 1;
+  transform: none;
+}
+[data-row-mode="chaos"] [data-row-tile] {
+  transform: translateY(16px) rotate(var(--jitter, 0deg));
+}
+[data-row-mode="zero"] [data-row-tile]:first-child {
+  transform: scale(0.42);
+}
+[data-row-connector] {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 320ms var(--ease-editorial);
+}
+[data-row-revealed] [data-row-connector] {
+  transform: scaleX(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-row-tile],
+  [data-row-connector] {
+    transition: none;
+  }
+}
