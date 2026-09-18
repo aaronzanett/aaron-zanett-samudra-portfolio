@@ -160,4 +160,12 @@ The site carries animation, video, and interactive media, so performance is a co
 ## Build log
 
 - **Scene 01 (The Idea) — done.** Pinned/sticky 4-stage scroll-scrubbed crossfade (`useStagedScrub` in `lib/animation/`), reused for future scenes. Mobile breakpoint overrides ported from the design export at ≤720px. Reduced-motion renders a static stacked layout instead of the pinned crossfade.
-- Scenes 02–06: not yet built. See `PRD.md` and the design export spec for content.
+- **Scene 02 (The Mindset) — done.** Nested crossfade: intro hands off to a 6-phase sequence (Understand/Design/Experience/System/Build & Tools/Refine), each with a reveal-once micro-animation ported from the design export. No product-film video asset exists yet — frames render without the scroll-scrubbed video background the PRD calls for; dropping one in is a small follow-up once Aaron has a file.
+- **Scene 03 (The Process) — done, with a flagged simplification.** The source drives this scene with a virtual-canvas camera panning across a large composition (SVG connector draws, a product-shot morph). That literal system wasn't rebuilt — this reuses the Scene 01/02 staged-crossfade pattern instead: six beats (intro, 3 workflow rows, convergence, handoff), preserving the narrative and each row's distinct reveal style (plain / chaos jitter / zero scale-pop) without the pixel-perfect camera move. Worth revisiting if Aaron wants the literal camera version.
+- **Scene 04 (The Work) — done.** Repeating project-showcase component (not a card grid, per the PRD's explicit rejection) over a typed `Project[]` array, with a 4-shot auto-advancing slideshow using `next/image` over the real screenshots now in `public/projects/`. Per-project technologies are omitted — no verified tech-stack data per project, and PRD says never show a tool that wasn't used; needs Aaron's input.
+- Scenes 05–06: not yet built. See `PRD.md` and the design export spec for content.
+
+### Open items for Aaron
+- Scene 06's contact `mailto:` in the design export reads `aaronzanettsamudra@gmail.com` — one letter off from the address on file. Confirm which is correct before that scene ships.
+- No product-film video asset for Scene 02 yet.
+- Per-project technology tags for Scene 04 (real stack per project, not the PRD's illustrative example).
