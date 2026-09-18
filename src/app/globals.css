@@ -112,3 +112,614 @@ a:hover {
 [data-caret] {
   animation: om-caret 1.1s steps(1, end) infinite;
 }
+
+/* Scene 02, phase 2 (Design) — font/colour/scale trials, reveal-once. */
+@keyframes om-font-trials {
+  0%,
+  30% {
+    font-family: var(--font-grotesk);
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  34%,
+  62% {
+    font-family: var(--font-grotesk);
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+  }
+  68%,
+  100% {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+}
+@keyframes om-trial-a {
+  0%,
+  28% {
+    opacity: 1;
+  }
+  34%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes om-trial-b {
+  0%,
+  33% {
+    opacity: 0;
+  }
+  38%,
+  60% {
+    opacity: 1;
+  }
+  66%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes om-trial-c {
+  0%,
+  66% {
+    opacity: 0;
+  }
+  74%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes om-sw-1 {
+  0%,
+  30% {
+    background: var(--clay-400);
+  }
+  34%,
+  62% {
+    background: var(--amber-500);
+  }
+  68%,
+  100% {
+    background: var(--ink-900);
+  }
+}
+@keyframes om-sw-2 {
+  0%,
+  30% {
+    background: var(--clay-400);
+  }
+  34%,
+  62% {
+    background: var(--amber-500);
+  }
+  68%,
+  100% {
+    background: var(--cream-100);
+  }
+}
+@keyframes om-sw-3 {
+  0%,
+  30% {
+    background: var(--clay-300);
+  }
+  34%,
+  62% {
+    background: var(--red-500);
+  }
+  68%,
+  100% {
+    background: var(--amber-500);
+  }
+}
+@keyframes om-sw-4 {
+  0%,
+  30% {
+    background: var(--clay-300);
+  }
+  34%,
+  62% {
+    background: var(--red-500);
+  }
+  68%,
+  100% {
+    background: var(--red-500);
+  }
+}
+@keyframes om-bar-1 {
+  0%,
+  30% {
+    height: 24px;
+  }
+  34%,
+  62% {
+    height: 44px;
+  }
+  68%,
+  100% {
+    height: 8px;
+  }
+}
+@keyframes om-bar-2 {
+  0%,
+  30% {
+    height: 24px;
+  }
+  34%,
+  62% {
+    height: 36px;
+  }
+  68%,
+  100% {
+    height: 16px;
+  }
+}
+@keyframes om-bar-3 {
+  0%,
+  30% {
+    height: 24px;
+  }
+  34%,
+  62% {
+    height: 28px;
+  }
+  68%,
+  100% {
+    height: 24px;
+  }
+}
+@keyframes om-bar-4 {
+  0%,
+  30% {
+    height: 24px;
+  }
+  34%,
+  62% {
+    height: 20px;
+  }
+  68%,
+  100% {
+    height: 32px;
+  }
+}
+@keyframes om-bar-5 {
+  0%,
+  30% {
+    height: 24px;
+  }
+  34%,
+  62% {
+    height: 12px;
+  }
+  68%,
+  100% {
+    height: 48px;
+  }
+}
+[data-trial="a"],
+[data-trial="b"] {
+  opacity: 0;
+}
+[data-design-reveal] [data-type-spec] {
+  animation: om-font-trials 2100ms var(--ease-editorial) 300ms both;
+}
+[data-design-reveal] [data-trial="a"] {
+  animation: om-trial-a 2100ms linear 300ms both;
+}
+[data-design-reveal] [data-trial="b"] {
+  animation: om-trial-b 2100ms linear 300ms both;
+}
+[data-design-reveal] [data-trial="c"] {
+  animation: om-trial-c 2100ms linear 300ms both;
+}
+[data-design-reveal] [data-sw="1"] {
+  animation: om-sw-1 2100ms var(--ease-editorial) 300ms both;
+}
+[data-design-reveal] [data-sw="2"] {
+  animation: om-sw-2 2100ms var(--ease-editorial) 300ms both;
+}
+[data-design-reveal] [data-sw="3"] {
+  animation: om-sw-3 2100ms var(--ease-editorial) 300ms both;
+}
+[data-design-reveal] [data-sw="4"] {
+  animation: om-sw-4 2100ms var(--ease-editorial) 300ms both;
+}
+[data-design-reveal] [data-bar="1"] {
+  animation: om-bar-1 2100ms var(--ease-editorial) 300ms both;
+}
+[data-design-reveal] [data-bar="2"] {
+  animation: om-bar-2 2100ms var(--ease-editorial) 300ms both;
+}
+[data-design-reveal] [data-bar="3"] {
+  animation: om-bar-3 2100ms var(--ease-editorial) 300ms both;
+}
+[data-design-reveal] [data-bar="4"] {
+  animation: om-bar-4 2100ms var(--ease-editorial) 300ms both;
+}
+[data-design-reveal] [data-bar="5"] {
+  animation: om-bar-5 2100ms var(--ease-editorial) 300ms both;
+}
+
+/* Scene 02, phase 3 (Experience) — steps reorder, then lock in sequence. */
+@keyframes om-xp-1 {
+  0%,
+  22% {
+    background: transparent;
+    color: var(--ink-900);
+    transform: translateX(calc(100% + var(--space-2)));
+  }
+  40%,
+  44% {
+    background: transparent;
+    color: var(--ink-900);
+    transform: none;
+  }
+  50% {
+    background: var(--ink-900);
+    color: var(--cream-100);
+    transform: scale(0.97);
+  }
+  56%,
+  100% {
+    background: var(--ink-900);
+    color: var(--cream-100);
+    transform: none;
+  }
+}
+@keyframes om-xp-swap-fwd {
+  0%,
+  22% {
+    transform: translateX(calc(100% + var(--space-2)));
+  }
+  40%,
+  100% {
+    transform: none;
+  }
+}
+@keyframes om-xp-swap-back {
+  0%,
+  22% {
+    transform: translateX(calc(-100% - var(--space-2)));
+  }
+  40%,
+  100% {
+    transform: none;
+  }
+}
+@keyframes om-xp-2 {
+  0%,
+  57% {
+    background: transparent;
+  }
+  63%,
+  100% {
+    background: var(--cream-100);
+  }
+}
+@keyframes om-xp-3 {
+  0%,
+  70% {
+    background: transparent;
+  }
+  76%,
+  100% {
+    background: var(--clay-300);
+  }
+}
+@keyframes om-xp-4 {
+  0%,
+  84% {
+    background: transparent;
+  }
+  90%,
+  100% {
+    background: var(--amber-500);
+  }
+}
+@keyframes om-xp-ring {
+  0%,
+  40% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  46% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  54% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+  62%,
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+@keyframes om-xp-note-a {
+  0%,
+  26% {
+    opacity: 1;
+  }
+  32%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes om-xp-note-b {
+  0%,
+  31% {
+    opacity: 0;
+  }
+  37%,
+  62% {
+    opacity: 1;
+  }
+  68%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes om-xp-note-c {
+  0%,
+  68% {
+    opacity: 0;
+  }
+  76%,
+  100% {
+    opacity: 1;
+  }
+}
+[data-xp-note="a"],
+[data-xp-note="b"] {
+  opacity: 0;
+}
+[data-xp-ring] {
+  opacity: 0;
+}
+[data-xp-reveal] [data-xp-step="1"] {
+  animation: om-xp-1 3400ms var(--ease-editorial) 300ms both;
+}
+[data-xp-reveal] [data-xp-step="2"] {
+  animation:
+    om-xp-swap-back 3400ms var(--ease-editorial) 300ms both,
+    om-xp-2 3400ms var(--ease-editorial) 300ms both;
+}
+[data-xp-reveal] [data-xp-step="3"] {
+  animation:
+    om-xp-swap-fwd 3400ms var(--ease-editorial) 300ms both,
+    om-xp-3 3400ms var(--ease-editorial) 300ms both;
+}
+[data-xp-reveal] [data-xp-step="4"] {
+  animation:
+    om-xp-swap-back 3400ms var(--ease-editorial) 300ms both,
+    om-xp-4 3400ms var(--ease-editorial) 300ms both;
+}
+[data-xp-reveal] [data-xp-ring] {
+  animation: om-xp-ring 3400ms var(--ease-editorial) 300ms both;
+}
+[data-xp-reveal] [data-xp-note="a"] {
+  animation: om-xp-note-a 3400ms linear 300ms both;
+}
+[data-xp-reveal] [data-xp-note="b"] {
+  animation: om-xp-note-b 3400ms linear 300ms both;
+}
+[data-xp-reveal] [data-xp-note="c"] {
+  animation: om-xp-note-c 3400ms linear 300ms both;
+}
+
+/* Scene 02, phase 4 (System) — atoms appear, then their usages. */
+@keyframes om-sys-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes om-sys-rule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+[data-sys-asset],
+[data-sys-use] > * {
+  opacity: 0;
+}
+[data-sys-rule] {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+[data-sys-reveal] [data-sys-asset] {
+  animation: om-sys-in 380ms var(--ease-editorial) both;
+}
+[data-sys-reveal] [data-sys-asset="2"] {
+  animation-delay: 90ms;
+}
+[data-sys-reveal] [data-sys-asset="3"] {
+  animation-delay: 180ms;
+}
+[data-sys-reveal] [data-sys-asset="4"] {
+  animation-delay: 270ms;
+}
+[data-sys-reveal] [data-sys-rule] {
+  animation: om-sys-rule 520ms var(--ease-editorial) 520ms both;
+}
+[data-sys-reveal] [data-sys-use] > * {
+  animation: om-sys-in 420ms var(--ease-editorial) both;
+}
+[data-sys-reveal] [data-sys-use="1"] > * {
+  animation-delay: 820ms;
+}
+[data-sys-reveal] [data-sys-use="2"] > * {
+  animation-delay: 1180ms;
+}
+[data-sys-reveal] [data-sys-use="3"] > * {
+  animation-delay: 1540ms;
+}
+
+/* Scene 02, phase 5 (Build & Tools) — stack arrives in sequence. */
+[data-tool] {
+  opacity: 0;
+}
+[data-tools-rule] {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+[data-tools-reveal] [data-tools-rule] {
+  animation: om-sys-rule 520ms var(--ease-editorial) both;
+}
+[data-tools-reveal] [data-tools-rule="2"] {
+  animation-delay: 300ms;
+}
+[data-tools-reveal] [data-tool] {
+  animation-name: om-sys-in;
+  animation-duration: 360ms;
+  animation-timing-function: var(--ease-editorial);
+  animation-fill-mode: both;
+}
+
+/* Scene 02, phase 6 (Refine) — loop runs, findings land, bar fills. */
+@keyframes om-ref-step {
+  0%,
+  6% {
+    background: transparent;
+    color: var(--ink-900);
+  }
+  12%,
+  20% {
+    background: var(--ink-900);
+    color: var(--cream-100);
+  }
+  28%,
+  100% {
+    background: transparent;
+    color: var(--ink-900);
+  }
+}
+@keyframes om-ref-lock {
+  0%,
+  62% {
+    background: transparent;
+    color: var(--ink-900);
+  }
+  72%,
+  100% {
+    background: var(--red-500);
+    color: var(--cream-100);
+  }
+}
+@keyframes om-ref-item {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes om-ref-tick {
+  from {
+    transform: translateY(-2px) scale(0);
+  }
+  to {
+    transform: translateY(-2px) scale(1);
+  }
+}
+@keyframes om-ref-bar {
+  from {
+    width: 14%;
+  }
+  to {
+    width: 100%;
+  }
+}
+[data-ref-item] {
+  opacity: 0;
+}
+[data-ref-bar] {
+  width: 14%;
+}
+[data-ref-reveal] [data-ref-step] {
+  animation: om-ref-step 2000ms var(--ease-editorial) 300ms both;
+}
+[data-ref-reveal] [data-ref-step="2"] {
+  animation-delay: 420ms;
+}
+[data-ref-reveal] [data-ref-step="3"] {
+  animation-delay: 540ms;
+}
+[data-ref-reveal] [data-ref-step="4"] {
+  animation-delay: 660ms;
+}
+[data-ref-reveal] [data-ref-step="5"] {
+  animation: om-ref-lock 2000ms var(--ease-editorial) 300ms both;
+}
+[data-ref-reveal] [data-ref-item] {
+  animation: om-ref-item 420ms var(--ease-editorial) both;
+}
+[data-ref-reveal] [data-ref-item="1"] {
+  animation-delay: 820ms;
+}
+[data-ref-reveal] [data-ref-item="2"] {
+  animation-delay: 1000ms;
+}
+[data-ref-reveal] [data-ref-item="3"] {
+  animation-delay: 1180ms;
+}
+[data-ref-reveal] [data-ref-item="4"] {
+  animation-delay: 1360ms;
+}
+[data-ref-reveal] [data-ref-tick] {
+  animation: om-ref-tick 300ms var(--ease-editorial) both;
+}
+[data-ref-reveal] [data-ref-tick="1"] {
+  animation-delay: 900ms;
+}
+[data-ref-reveal] [data-ref-tick="2"] {
+  animation-delay: 1080ms;
+}
+[data-ref-reveal] [data-ref-tick="3"] {
+  animation-delay: 1260ms;
+}
+[data-ref-reveal] [data-ref-tick="4"] {
+  animation-delay: 1440ms;
+}
+[data-ref-reveal] [data-ref-bar] {
+  animation: om-ref-bar 900ms var(--ease-editorial) 1700ms both;
+}
+[data-ref-num] {
+  opacity: 0;
+}
+[data-ref-reveal] [data-ref-num] {
+  animation: om-ref-item 360ms var(--ease-editorial) 2450ms both;
+}
+
+/* Reduced motion never gates Scene 02 content — these elements only ever
+   reach full visibility via a scroll-triggered reveal attribute, which
+   useStagedScrub skips entirely under prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  [data-sys-asset],
+  [data-sys-use] > *,
+  [data-tool],
+  [data-ref-item] {
+    opacity: 1;
+  }
+  [data-ref-bar] {
+    width: 100%;
+  }
+  [data-ref-num] {
+    opacity: 1;
+  }
+  [data-ref-step="5"] {
+    background: var(--red-500);
+    color: var(--cream-100);
+  }
+}
