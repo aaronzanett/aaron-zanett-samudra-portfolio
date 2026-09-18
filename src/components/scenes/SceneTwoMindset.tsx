@@ -229,7 +229,7 @@ export function SceneTwoMindset() {
               <PhaseFrame registerRef={registerFrameRef(1)} reducedMotion={reducedMotion} varName="--f2">
                 <DesignFrame />
               </PhaseFrame>
-              <PhaseFrame registerRef={registerFrameRef(2)} reducedMotion={reducedMotion} varName="--f3">
+              <PhaseFrame registerRef={registerFrameRef(2)} reducedMotion={reducedMotion} varName="--f3" centered>
                 <ExperienceFrame />
               </PhaseFrame>
               <PhaseFrame registerRef={registerFrameRef(3)} reducedMotion={reducedMotion} varName="--f4">
@@ -254,22 +254,30 @@ function PhaseFrame({
   varName,
   isFirst = false,
   reducedMotion,
+  centered = false,
   children,
 }: {
   registerRef: (el: HTMLDivElement | null) => void;
   varName: string;
   isFirst?: boolean;
   reducedMotion: boolean;
+  /** Experience (f3) is the one panel whose source frame centers its content
+   * in a flexible row instead of pinning children to top/bottom via
+   * space-between — see the distinct `grid-template-rows` style below. */
+  centered?: boolean;
   children: React.ReactNode;
 }) {
+  const layout: CSSProperties = centered
+    ? { display: "grid", gridTemplateRows: "auto minmax(0, 1fr)", gap: "var(--space-4)" }
+    : { display: "grid", alignContent: "space-between", gap: "var(--space-4)" };
   return (
     <div
       ref={registerRef}
       data-frame
       style={
         reducedMotion
-          ? { display: "grid", alignContent: "space-between", gap: "var(--space-4)", padding: "var(--space-5)" }
-          : { gridArea: "stack", opacity: `var(${varName}, ${isFirst ? 1 : 0})`, padding: "var(--space-5)", display: "grid", alignContent: "space-between", gap: "var(--space-4)" }
+          ? { ...layout, padding: "var(--space-5)" }
+          : { gridArea: "stack", opacity: `var(${varName}, ${isFirst ? 1 : 0})`, padding: "var(--space-5)", ...layout }
       }
     >
       {children}
@@ -373,7 +381,7 @@ function ExperienceFrame() {
     <>
       <div style={labelMuted}>{c.label}</div>
       <div data-xp style={{ display: "grid", gap: "var(--space-4)", alignContent: "center" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "var(--space-2)" }}>
+        <div data-xp-steps style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "var(--space-2)" }}>
           {c.steps.map((step, i) => (
             <div
               key={step}

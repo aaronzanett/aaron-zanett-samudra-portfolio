@@ -1038,3 +1038,12 @@ a:hover {
     font-size: 3.25rem !important;
   }
 }
+
+/* Experience (panel 03) step grid: not in the source's own breakpoints —
+   4 equal columns would squeeze too tight on a phone, so mobile gets 2x2.
+   Same ≤720px cutover the rest of this scene's mobile overrides use. */
+@media (max-width: 720px) {
+  [data-xp-steps] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
