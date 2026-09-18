@@ -123,7 +123,10 @@ a:hover {
    group's own reveal fires, then the first frame's content (label, the six
    item rows, the tag row) fades and rises in, staggered. This is separate
    from the per-phase data-*-reveal gating below — it's keyed off the
-   framewrap itself, and only ever targets [data-frame]:first-of-type. */
+   framewrap itself, and only ever targets [data-frame]:first-of-type.
+   Duration (520ms, both rules below) is kept in sync with panel 05's
+   om-sys-in — same value reused from --dur-slow so the two panels' fades
+   read at the same pace even though they're driven by different keyframes. */
 @keyframes om-panel-content {
   from {
     opacity: 0;
@@ -143,7 +146,7 @@ a:hover {
   }
 }
 [data-framewrap][data-reveal] [data-frame]:first-of-type > * {
-  animation: om-panel-content 420ms var(--ease-editorial) both;
+  animation: om-panel-content 520ms var(--ease-editorial) both;
 }
 [data-framewrap][data-reveal] [data-frame]:first-of-type > *:nth-child(2) {
   animation-delay: 80ms;
@@ -152,7 +155,7 @@ a:hover {
   animation-delay: 160ms;
 }
 [data-framewrap][data-reveal] [data-frame]:first-of-type > div:nth-child(2) > div {
-  animation: om-panel-content 360ms var(--ease-editorial) both;
+  animation: om-panel-content 520ms var(--ease-editorial) both;
 }
 [data-framewrap][data-reveal] [data-frame]:first-of-type > div:nth-child(2) > div:nth-child(2) {
   animation-delay: 130ms;
@@ -758,9 +761,10 @@ a:hover {
 [data-tools-reveal] [data-tools-rule="2"] {
   animation-delay: 300ms;
 }
+/* 520ms to match panel 01 (Understand)'s om-panel-content duration above. */
 [data-tools-reveal] [data-tool] {
   animation-name: om-sys-in;
-  animation-duration: 360ms;
+  animation-duration: 520ms;
   animation-timing-function: var(--ease-editorial);
   animation-fill-mode: both;
 }
