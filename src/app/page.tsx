@@ -3,9 +3,6 @@ import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import { SkipLink } from "@/components/ui/SkipLink";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SceneOneIdea } from "@/components/scenes/SceneOneIdea";
-import { SceneTwoMindset } from "@/components/scenes/SceneTwoMindset";
-import { SceneThreeProcess } from "@/components/scenes/SceneThreeProcess";
-import { SceneFourWork } from "@/components/scenes/SceneFourWork";
 
 export default function Home() {
   return (
@@ -17,11 +14,8 @@ export default function Home() {
             <SiteHeader />
             <main>
               <SceneOneIdea />
-              <SceneTwoMindset />
-              <SceneThreeProcess />
+              {/* Scenes 02–06 land here, one at a time, per claude.md. */}
               <div id="work-index" />
-              <SceneFourWork />
-              {/* Scenes 05–06 land here, one at a time, per claude.md. */}
             </main>
           </div>
         </div>
