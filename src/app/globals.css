@@ -118,6 +118,63 @@ a:hover {
 [data-pin] {
   height: calc(100dvh - var(--hdr, 58px)) !important;
 }
+
+/* Panel 01 — Understand: nothing in the framewrap paints until the phases
+   group's own reveal fires, then the first frame's content (label, the six
+   item rows, the tag row) fades and rises in, staggered. This is separate
+   from the per-phase data-*-reveal gating below — it's keyed off the
+   framewrap itself, and only ever targets [data-frame]:first-of-type. */
+@keyframes om-panel-content {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+[data-framewrap]:not([data-reveal]) [data-frame] {
+  opacity: 0 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-framewrap]:not([data-reveal]) [data-frame] {
+    opacity: 1 !important;
+  }
+}
+[data-framewrap][data-reveal] [data-frame]:first-of-type > * {
+  animation: om-panel-content 420ms var(--ease-editorial) both;
+}
+[data-framewrap][data-reveal] [data-frame]:first-of-type > *:nth-child(2) {
+  animation-delay: 80ms;
+}
+[data-framewrap][data-reveal] [data-frame]:first-of-type > *:nth-child(3) {
+  animation-delay: 160ms;
+}
+[data-framewrap][data-reveal] [data-frame]:first-of-type > div:nth-child(2) > div {
+  animation: om-panel-content 360ms var(--ease-editorial) both;
+}
+[data-framewrap][data-reveal] [data-frame]:first-of-type > div:nth-child(2) > div:nth-child(2) {
+  animation-delay: 130ms;
+}
+[data-framewrap][data-reveal] [data-frame]:first-of-type > div:nth-child(2) > div:nth-child(3) {
+  animation-delay: 180ms;
+}
+[data-framewrap][data-reveal] [data-frame]:first-of-type > div:nth-child(2) > div:nth-child(4) {
+  animation-delay: 230ms;
+}
+[data-framewrap][data-reveal] [data-frame]:first-of-type > div:nth-child(2) > div:nth-child(5) {
+  animation-delay: 280ms;
+}
+[data-framewrap][data-reveal] [data-frame]:first-of-type > div:nth-child(2) > div:nth-child(6) {
+  animation-delay: 330ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-framewrap][data-reveal] [data-frame] > *,
+  [data-framewrap][data-reveal] [data-frame] > div > div {
+    animation: none !important;
+  }
+}
 [data-stagewrap] {
   overflow: hidden;
 }

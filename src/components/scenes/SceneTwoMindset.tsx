@@ -38,9 +38,16 @@ export function SceneTwoMindset() {
   const sectionRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const frameRefs = useRef<Array<HTMLDivElement | null>>([null, null, null, null, null, null]);
+  const framewrapRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
 
   useRegisterScene(sectionRef, "Scene 02 — The Mindset");
+
+  const onOuterCommit = useCallback((index: number) => {
+    // index 1 = the phases group (--g) becoming current — this is when panel
+    // 01 (Understand) first paints, so its content fade/rise fires here.
+    if (index === 1) framewrapRef.current?.setAttribute("data-reveal", "1");
+  }, []);
 
   // Outer crossfade: intro copy (--i) hands off to the phases group (--g) at 12% scroll.
   useStagedScrub({
@@ -49,6 +56,7 @@ export function SceneTwoMindset() {
     thresholds: [0.12],
     vars: ["--i", "--g"],
     reducedMotion,
+    onStageCommit: onOuterCommit,
   });
 
   const onPhaseCommit = useCallback((index: number) => {
@@ -199,6 +207,7 @@ export function SceneTwoMindset() {
             </ol>
 
             <div
+              ref={framewrapRef}
               data-framewrap
               style={{
                 position: "relative",
