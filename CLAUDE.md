@@ -160,4 +160,6 @@ The site carries animation, video, and interactive media, so performance is a co
 ## Build log
 
 - **Scene 01 (The Idea) — done.** Pinned/sticky 4-stage scroll-scrubbed crossfade (`useStagedScrub` in `lib/animation/`), reused for future scenes. Mobile breakpoint overrides ported from the design export at ≤720px. Reduced-motion renders a static stacked layout instead of the pinned crossfade.
-- Scenes 02–06: not yet built. See `PRD.md` and the design export spec for content.
+- **Scene 02 (The Mindset) — done, ported verbatim from the Claude Design export.** Nested crossfade (intro → 6 phases) using `useStagedScrub` for both levels. Every phase's markup, inline styles, and reveal-once keyframes (font/colour/scale trials, step reordering, atom→usage reveal, tool stagger, checklist + progress bar) are copied 1:1 from `_design_import/Aaron Portfolio.dc.html`, including the real devicon/simple-icons CDN logos and local `gsap.svg` for Build & Tools, and the exact height/width breakpoint overrides (≤760px/≤620px height, ≤860px/≤720px width) via the source's own `data-*` attribute selectors. Verified phase-by-phase in-browser against the source and at mobile width — no overflow.
+  - No product-film video asset exists yet — the design conditionally renders a scroll-scrubbed `<video>` behind the phase frames (defaults to no video); dropping one in is a small follow-up once Aaron has a file.
+- Scenes 03–06: not yet built. See `PRD.md` and the design export spec for content.
