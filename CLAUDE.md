@@ -171,4 +171,10 @@ The site carries animation, video, and interactive media, so performance is a co
   - The design defines `om-rise` twice (16px, then 18px); the later 18px wins everywhere, so the global keyframe was corrected to 18px — this also nudges Scene 01's `data-enter` entrance by 2px to match the source.
   - Under `prefers-reduced-motion` the rise is skipped (everything stays visible) and the Motion experiment ignores pointer movement — the design's static mode.
   - The Responsive frame starts at the track width and keeps its current width on window resize (clamped to 240px..track-32px), as in the design.
-- Scene 06: not yet built. See `PRD.md` and the design export spec for content.
+- **Scene 06 (The End) — done, ported from the design's `section[data-scene="06"]`.** `components/scenes/SceneEnd.tsx`. Heading block, contact row (Email / GitHub / LinkedIn / Résumé with the design's 1.25px line icons) and the "Aaron Zanett Samudra — 2026" credit, with the design's ≤720px footer stacking rule and its one-time rise-in (strip first, then heading block and contact row 90ms apart). Global default link underline corrected to `var(--rule)` as in the design.
+  - Résumé opens in a new tab (`target="_blank" rel="noreferrer noopener"`) — a change from the design's dead `href="#"` placeholder. It points at `/resume.pdf`, which does not exist yet.
+
+### Open items for Aaron
+- Add the résumé PDF at `public/resume.pdf` (the link 404s until then).
+- The design's `mailto:` is `aaronzanettsamudra@gmail.com`, one word different from the account address on file (`aaronzanettsamudraweb@gmail.com`). Kept the design's; confirm which is correct.
+- No product-film video asset for Scene 02 (see above).

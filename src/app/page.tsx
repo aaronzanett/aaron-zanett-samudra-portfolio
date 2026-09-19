@@ -6,6 +6,7 @@ import { SceneOneIdea } from "@/components/scenes/SceneOneIdea";
 import { SceneTwoMindset } from "@/components/scenes/SceneTwoMindset";
 import { SceneProcessWork } from "@/components/scenes/SceneProcessWork";
 import { ScenePlayground } from "@/components/scenes/ScenePlayground";
+import { SceneEnd } from "@/components/scenes/SceneEnd";
 
 export default function Home() {
   return (
@@ -20,7 +21,7 @@ export default function Home() {
               <SceneTwoMindset />
               <SceneProcessWork />
               <ScenePlayground />
-              {/* Scene 06 lands here, per claude.md. */}
+              <SceneEnd />
               <div id="work-index" />
             </main>
           </div>
