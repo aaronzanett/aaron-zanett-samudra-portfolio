@@ -74,7 +74,12 @@ export function SiteHeader() {
   return (
     <header
       ref={ref}
-      className="sticky top-0 z-20 rounded-t-(--radius-page) border-b border-(--rule) bg-(--surface-page) px-(--gutter) pt-(--space-5) pb-(--space-4)"
+      // Rounded only at the very top of the page, where it forms the card's corners. Once stuck to the
+      // viewport the corners would be transparent and let scrolling content (e.g. a scene's full-width
+      // border) peek out at the edges, so they square off.
+      className={`sticky top-0 z-20 border-b border-(--rule) bg-(--surface-page) px-(--gutter) pt-(--space-5) pb-(--space-4) transition-[border-radius] duration-(--dur-fast) ease-(--ease-editorial) ${
+        progress > 0 ? "rounded-t-none" : "rounded-t-(--radius-page)"
+      }`}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-(--space-5)">
         <h1 className="m-0 font-grotesk text-[clamp(1.0625rem,1.6vw,1.375rem)] leading-none font-semibold [letter-spacing:-0.02em]">
