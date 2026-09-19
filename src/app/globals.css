@@ -65,10 +65,11 @@ a:hover {
 }
 
 /* Shared entrance keyframes, reused across scenes. */
+/* The design declares om-rise twice (16px, then 18px); the later 18px one wins everywhere. */
 @keyframes om-rise {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(18px);
   }
   to {
     opacity: 1;
@@ -111,6 +112,22 @@ a:hover {
 }
 [data-caret] {
   animation: om-caret 1.1s steps(1, end) infinite;
+}
+
+/* Scenes 05/06 arrive as their own blocks settle into view (set by the scene's IntersectionObserver). */
+[data-rise] {
+  opacity: 0;
+}
+[data-rise-in] {
+  animation: om-rise 640ms var(--ease-editorial) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-rise] {
+    opacity: 1;
+  }
+  [data-rise-in] {
+    animation: none !important;
+  }
 }
 
 /* --- Scene 02 — ported verbatim from the Claude Design export --- */

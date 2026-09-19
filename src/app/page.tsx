@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SceneOneIdea } from "@/components/scenes/SceneOneIdea";
 import { SceneTwoMindset } from "@/components/scenes/SceneTwoMindset";
 import { SceneProcessWork } from "@/components/scenes/SceneProcessWork";
+import { ScenePlayground } from "@/components/scenes/ScenePlayground";
 
 export default function Home() {
   return (
@@ -18,7 +19,8 @@ export default function Home() {
               <SceneOneIdea />
               <SceneTwoMindset />
               <SceneProcessWork />
-              {/* Scenes 05–06 land here, one at a time, per claude.md. */}
+              <ScenePlayground />
+              {/* Scene 06 lands here, per claude.md. */}
               <div id="work-index" />
             </main>
           </div>
