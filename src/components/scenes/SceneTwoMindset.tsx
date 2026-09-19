@@ -133,7 +133,7 @@ export function SceneTwoMindset() {
                 : { gridArea: "stack", alignSelf: "center", opacity: "var(--i, 1)", transform: "translateY(calc((1 - var(--i, 1)) * -20px))" }
             }
           >
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))", gap: "var(--gutter)", alignItems: "start" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))", columnGap: "var(--gutter)", rowGap: "var(--space-5)", alignItems: "start" }}>
               <h2
                 id="s2-h"
                 style={{

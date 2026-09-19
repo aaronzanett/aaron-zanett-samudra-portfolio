@@ -4,7 +4,7 @@ export const scene02Content = {
     heading:
       "I'm Aaron. A Frontend Developer focused on turning ideas, designs and requirements into thoughtful digital experiences.",
     lead: "I care about the details. How it looks. How it feels. How it behaves. How it works.",
-    body: "Below is the whole route from a requirement to a shipped product, in seven phases. Scroll drives it — down advances, up reverses, and it moves at whatever speed you do.",
+    body: "Below is the whole route from a requirement to a shipped product, in six phases. Scroll drives the experience — down advances, up reverses, and each phase unfolds as you move through it.",
   },
   phases: [
     { num: "01", name: "Understand", tagline: "Make it clear" },
