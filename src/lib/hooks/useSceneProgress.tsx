@@ -13,54 +13,69 @@ import {
 interface SceneProgressContextValue {
   activeLabel: string;
   progress: number; // 0–100
-  registerScene: (el: HTMLElement | null, label: string) => void;
+  /** Registers a scene's element under a label; returns a function that unregisters it. */
+  registerScene: (el: HTMLElement | null, label: string) => () => void;
 }
 
 const SceneProgressContext = createContext<SceneProgressContextValue | null>(null);
 
 const INITIAL_LABEL = "Scene 01 — The Idea";
+const FALLBACK_HEADER_HEIGHT = 58;
 
 export function SceneProgressProvider({ children }: { children: ReactNode }) {
   const [activeLabel, setActiveLabel] = useState(INITIAL_LABEL);
   const [progress, setProgress] = useState(0);
   const scenes = useRef<Map<HTMLElement, string>>(new Map());
-  const observer = useRef<IntersectionObserver | null>(null);
 
   const registerScene = useCallback((el: HTMLElement | null, label: string) => {
-    if (!el) return;
+    if (!el) return () => {};
     scenes.current.set(el, label);
-    observer.current?.observe(el);
+    return () => {
+      scenes.current.delete(el);
+    };
   }, []);
 
   useEffect(() => {
-    observer.current = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible.length > 0) {
-          const label = scenes.current.get(visible[0].target as HTMLElement);
-          if (label) setActiveLabel(label);
-        }
-      },
-      { rootMargin: "-1px 0px -85% 0px", threshold: 0 }
-    );
-    scenes.current.forEach((_, el) => observer.current?.observe(el));
-    return () => observer.current?.disconnect();
-  }, []);
+    /**
+     * The label names whichever scene has most recently passed under the header — the last one, in
+     * document order, whose top edge is at or above the header's bottom edge (the design's own rule).
+     * It is recomputed from scratch on every scroll and resize, so it never depends on which scenes
+     * happened to change state — an IntersectionObserver only reports changes, and on short screens
+     * two neighbouring scenes can share the trigger band, leaving the label stale or skipping a scene.
+     */
+    const activeSceneLabel = () => {
+      const offset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--hdr")) || FALLBACK_HEADER_HEIGHT;
+      const inOrder = Array.from(scenes.current.entries()).sort(([a], [b]) =>
+        a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+      );
+      let name = INITIAL_LABEL;
+      for (const [el, label] of inOrder) {
+        if (el.getBoundingClientRect().top <= offset + 1) name = label;
+      }
+      // A final scene shorter than the viewport can never reach the header, so at the very bottom
+      // of the page the last scene is the active one.
+      const doc = document.documentElement;
+      if (inOrder.length > 0 && window.scrollY >= doc.scrollHeight - doc.clientHeight - 2) {
+        name = inOrder[inOrder.length - 1][1];
+      }
+      return name;
+    };
 
-  useEffect(() => {
-    const onScroll = () => {
+    const update = () => {
       const doc = document.documentElement;
       const max = doc.scrollHeight - doc.clientHeight;
       setProgress(max > 0 ? (window.scrollY / max) * 100 : 0);
+      setActiveLabel(activeSceneLabel());
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    // Fonts and images can move scene tops without a scroll or resize.
+    window.addEventListener("load", update);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+      window.removeEventListener("load", update);
     };
   }, []);
 
@@ -80,7 +95,5 @@ export function useSceneProgress() {
 /** Call from a scene component to register its section for header label tracking. */
 export function useRegisterScene(ref: React.RefObject<HTMLElement | null>, label: string) {
   const { registerScene } = useSceneProgress();
-  useEffect(() => {
-    registerScene(ref.current, label);
-  }, [registerScene, ref, label]);
+  useEffect(() => registerScene(ref.current, label), [registerScene, ref, label]);
 }
