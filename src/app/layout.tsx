@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Archivo } from "next/font/google";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import "./globals.css";
 
 const bodoniModa = Bodoni_Moda({
@@ -27,8 +28,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${bodoniModa.variable} ${archivo.variable} h-full antialiased`}
+      // Set in the server HTML so scrolling is locked from the first paint; LoadingScreen removes them.
+      data-loading=""
+      data-hold-anim=""
+      suppressHydrationWarning
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <LoadingScreen />
+        {children}
+      </body>
     </html>
   );
 }

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { LOADING_DONE_EVENT } from "@/lib/loading";
 
 /**
  * Drives Lenis smooth scroll and keeps it in lockstep with GSAP's ticker so
@@ -24,6 +25,11 @@ export function useLenis(reducedMotion: boolean) {
 
     lenis.on("scroll", ScrollTrigger.update);
 
+    // The loading screen locks scrolling; Lenis would otherwise still honour wheel input.
+    if (document.documentElement.hasAttribute("data-loading")) lenis.stop();
+    const onReady = () => lenis.start();
+    window.addEventListener(LOADING_DONE_EVENT, onReady);
+
     const tick = (time: number) => {
       lenis.raf(time * 1000);
     };
@@ -31,6 +37,7 @@ export function useLenis(reducedMotion: boolean) {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      window.removeEventListener(LOADING_DONE_EVENT, onReady);
       gsap.ticker.remove(tick);
       lenis.destroy();
     };
