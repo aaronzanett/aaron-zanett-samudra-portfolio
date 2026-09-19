@@ -18,6 +18,8 @@ interface UseStagedScrubOptions {
   /** CSS custom property names, one per stage, in order (e.g. ['--a', '--b', '--c', '--d']). */
   vars: string[];
   reducedMotion: boolean;
+  /** Crossfade timing in seconds: `perStage` per stage travelled, capped at `max`. Defaults to 0.32 / 0.6. */
+  tween?: { perStage: number; max: number };
   /** Fires once, the first time a given stage index becomes committed (for reveal-once choreography). */
   onStageCommit?: (index: number) => void;
 }
@@ -35,6 +37,7 @@ export function useStagedScrub({
   thresholds,
   vars,
   reducedMotion,
+  tween = { perStage: 0.32, max: 0.6 },
   onStageCommit,
 }: UseStagedScrubOptions) {
   useEffect(() => {
@@ -73,7 +76,7 @@ export function useStagedScrub({
           const distance = Math.abs(index - state.pos);
           gsap.to(state, {
             pos: index,
-            duration: Math.min(0.6, 0.32 * Math.max(distance, 1)),
+            duration: Math.min(tween.max, tween.perStage * Math.max(distance, 1)),
             ease: "power2.inOut",
             overwrite: true,
             onUpdate: applyVars,

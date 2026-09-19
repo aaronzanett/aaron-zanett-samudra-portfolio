@@ -24,6 +24,8 @@ export function SceneOneIdea() {
     thresholds: [0.19, 0.46, 0.72],
     vars: STAGE_VARS,
     reducedMotion,
+    // Slower than the hook's default so the view switches read more calmly.
+    tween: { perStage: 0.5, max: 0.9 },
   });
 
   const stageStyle = (varName: string, hidden: boolean) =>
