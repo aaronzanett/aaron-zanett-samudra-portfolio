@@ -5,6 +5,7 @@ import { scene02Content as content } from "@/content/scene-02";
 import { useStagedScrub } from "@/lib/animation/useStagedScrub";
 import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
 import { useRegisterScene } from "@/lib/hooks/useSceneProgress";
+import { MASK_TOOL_ICONS } from "@/lib/loading";
 
 const PHASE_VARS = ["--f1", "--f2", "--f3", "--f4", "--f5", "--f6"];
 // Reveal-once attribute per phase index — Understand (0) has no gated micro-animation, just the crossfade.
@@ -19,7 +20,6 @@ const label: CSSProperties = {
 const labelMuted: CSSProperties = { ...label, color: "var(--text-muted)" };
 
 const DEVICON = (slug: string) => `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${slug}/${slug}-original.svg`;
-const CLAUDE_MASK_URL = "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/claude.svg";
 const TOOL_ICON_SRC: Record<string, string> = {
   javascript: DEVICON("javascript"),
   typescript: DEVICON("typescript"),
@@ -510,7 +510,7 @@ function SystemUsagePreview({ element }: { element: "labelField" | "panels" | "b
 function ToolsFrame() {
   const c = content.tools;
   // Delay steps continuously across both groups (0ms, 55ms, 110ms...), matching the
-  // design's single staggered cascade over all 13 badges — offset is each group's
+  // design's single staggered cascade over all 16 badges — offset is each group's
   // starting index, i.e. the item count of every group before it.
   const groupOffset = (gi: number) => c.groups.slice(0, gi).reduce((sum, group) => sum + group.items.length, 0);
 
@@ -530,15 +530,15 @@ function ToolsFrame() {
                 return (
                   <span key={tool.name} data-tool style={{ animationDelay: `${delay}ms`, display: "grid", gap: 6, justifyItems: "center", textAlign: "center" }}>
                     <span style={{ position: "relative", width: 30, height: 30, display: "grid", placeItems: "center" }}>
-                      {tool.icon === "claude" ? (
+                      {MASK_TOOL_ICONS[tool.icon] ? (
                         <span
                           aria-hidden="true"
                           style={{
                             width: 26,
                             height: 26,
-                            background: "#d97757",
-                            WebkitMask: `url(${CLAUDE_MASK_URL}) center / contain no-repeat`,
-                            mask: `url(${CLAUDE_MASK_URL}) center / contain no-repeat`,
+                            background: MASK_TOOL_ICONS[tool.icon].color,
+                            WebkitMask: `url(${MASK_TOOL_ICONS[tool.icon].url}) center / contain no-repeat`,
+                            mask: `url(${MASK_TOOL_ICONS[tool.icon].url}) center / contain no-repeat`,
                           }}
                         />
                       ) : tool.icon === "gsap" ? (
