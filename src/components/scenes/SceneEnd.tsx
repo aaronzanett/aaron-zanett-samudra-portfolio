@@ -44,8 +44,8 @@ function Icon({ children }: { children: ReactNode }) {
   );
 }
 
-// The design leaves the résumé as a dead "#" placeholder; the file is expected at public/resume.pdf.
-const RESUME_HREF = "/resume.pdf";
+// The design leaves the résumé as a dead "#" placeholder; the file lives at public/Aaron-Zanett-Samudra-Resume.pdf.
+const RESUME_HREF = "/Aaron-Zanett-Samudra-Resume.pdf";
 
 export function SceneEnd() {
   const sectionRef = useRef<HTMLElement>(null);
