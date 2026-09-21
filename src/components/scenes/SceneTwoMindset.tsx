@@ -5,7 +5,7 @@ import { scene02Content as content } from "@/content/scene-02";
 import { useStagedScrub } from "@/lib/animation/useStagedScrub";
 import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
 import { useRegisterScene } from "@/lib/hooks/useSceneProgress";
-import { MASK_TOOL_ICONS } from "@/lib/loading";
+import { LOCAL_TOOL_ICONS, MASK_TOOL_ICONS } from "@/lib/loading";
 
 const PHASE_VARS = ["--f1", "--f2", "--f3", "--f4", "--f5", "--f6"];
 // Reveal-once attribute per phase index — Understand (0) has no gated micro-animation, just the crossfade.
@@ -541,9 +541,9 @@ function ToolsFrame() {
                             mask: `url(${MASK_TOOL_ICONS[tool.icon].url}) center / contain no-repeat`,
                           }}
                         />
-                      ) : tool.icon === "gsap" ? (
+                      ) : LOCAL_TOOL_ICONS[tool.icon] ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src="/icons/gsap.svg" alt="" width={26} height={26} loading="lazy" style={{ width: 26, height: 26, objectFit: "contain" }} />
+                        <img src={LOCAL_TOOL_ICONS[tool.icon]} alt="" width={26} height={26} loading="lazy" style={{ width: 26, height: 26, objectFit: "contain" }} />
                       ) : (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={TOOL_ICON_SRC[tool.icon]} alt="" width={26} height={26} loading="lazy" style={{ width: 26, height: 26, objectFit: "contain" }} />
