@@ -21,6 +21,13 @@ export function useLenis(reducedMotion: boolean) {
       duration: 1.1,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
+      // <html> is height:100% (see layout.tsx's h-full) so its own box always equals the viewport —
+      // it never resizes when page content does. Lenis's autoResize watches `content` with a
+      // ResizeObserver to keep its scroll limit in sync, so watching <html> (its default) would
+      // never see height changes from scenes that resize after mount (e.g. Scene 05's Type dials),
+      // leaving the scrollable range stale and the page unreachable past the old limit. <body> has
+      // no fixed height, so its box tracks real content height and the observer fires correctly.
+      content: document.body,
     });
 
     lenis.on("scroll", ScrollTrigger.update);
