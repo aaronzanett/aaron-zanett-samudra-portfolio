@@ -13,16 +13,16 @@ const NATIVE_SCROLL_QUERY = "(max-width: 1024px), (pointer: coarse)";
  * WHERE EACH SCROLL MODE APPLIES (desktop; tablets and phones are always standard scroll):
  *
  *   Standard (browser) scroll — the first part of Scenes 02 and 04:
- *     Scene 02  from its top reaching the header (0) to 70% of its pinned range
- *     Scene 04  from its top reaching the header (0) to 60% of its pinned range
+ *     Scene 02  from its top reaching the header (0) to 30% of its pinned range
+ *     Scene 04  from its top reaching the header (0) to 40% of its pinned range
  *   Smooth (Lenis) scroll — everywhere else:
  *     Scene 01, the rest of Scene 02, Scene 03, the rest of Scene 04, Scene 05, Scene 06.
  *
  * Elements marked `data-native-scroll` are the standard-scroll scenes; the attribute's value is the end
- * of that scene's standard zone as a fraction of its pinned range (0.7 for Scene 02; Scene 04 uses this
+ * of that scene's standard zone as a fraction of its pinned range (0.3 for Scene 02; Scene 04 uses this
  * default). The mode is a pure function of scroll position, so it is identical scrolling down or up.
  */
-const DEFAULT_NATIVE_ZONE_END = 0.6;
+const DEFAULT_NATIVE_ZONE_END = 0.4;
 
 /**
  * True while a marked element is in the native part of its pinned range. The range runs from its top
