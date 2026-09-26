@@ -65,7 +65,11 @@ export function SceneProgressProvider({ children }: { children: ReactNode }) {
       const doc = document.documentElement;
       const max = doc.scrollHeight - doc.clientHeight;
       setProgress(max > 0 ? (window.scrollY / max) * 100 : 0);
-      setActiveLabel(activeSceneLabel());
+      const label = activeSceneLabel();
+      setActiveLabel(label);
+      // Published for non-React readers (useLenis decides per scene whether to smooth-scroll).
+      const sceneNumber = /Scene (\d+)/.exec(label)?.[1];
+      if (sceneNumber) doc.dataset.scene = sceneNumber;
     };
     update();
     window.addEventListener("scroll", update, { passive: true });

@@ -9,6 +9,9 @@ import { LOADING_DONE_EVENT } from "@/lib/loading";
 /** Tablets and phones (by width or by touch) keep the browser's own scrolling. */
 const NATIVE_SCROLL_QUERY = "(max-width: 1024px), (pointer: coarse)";
 
+/** Scene numbers (as in the header label) whose content keeps the browser's own scrolling on desktop too. */
+const NATIVE_SCROLL_SCENES = ["02", "04"];
+
 /**
  * Drives Lenis smooth scroll and keeps it in lockstep with GSAP's ticker so
  * ScrollTrigger reads the same scroll position Lenis is animating toward.
@@ -37,6 +40,9 @@ export function useLenis(reducedMotion: boolean) {
         // leaving the scrollable range stale and the page unreachable past the old limit. <body> has
         // no fixed height, so its box tracks real content height and the observer fires correctly.
         content: document.body,
+        // Scenes 02 and 04 scroll natively on every screen: while one is the active scene (published
+        // by SceneProgressProvider on <html>), Lenis leaves wheel/touch input to the browser.
+        prevent: () => NATIVE_SCROLL_SCENES.includes(document.documentElement.dataset.scene ?? ""),
       });
 
       lenis.on("scroll", ScrollTrigger.update);
