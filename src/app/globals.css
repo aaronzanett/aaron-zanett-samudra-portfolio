@@ -1072,39 +1072,57 @@ a:hover {
     font-size: 3.25rem !important;
   }
 
-  /* Phones are short: the six-step list plus the tallest panel (Build & Tools) must fit under the
-     header without clipping, so tighten every vertical gap in the pinned frame. */
+  /* Phones vary a lot in height (≈568–930px). Everything below is sized from the height actually
+     available (svh), so a tall phone gets larger labels and roomier panels instead of leaving spare
+     space at the bottom, while a short one falls back to the minimums — and the six-step labels
+     never drop below 16px. The tighter rules that follow (≤780px / ≤600px tall) still win where
+     space is genuinely scarce. */
   [data-s2-strip] {
-    margin-bottom: var(--space-3) !important;
+    margin-bottom: clamp(8px, 1.4svh, 20px) !important;
   }
   [data-phases] {
-    gap: var(--space-3) !important;
+    gap: clamp(12px, 1.8svh, 24px) !important;
   }
   [data-phases] > ol {
     gap: 0 !important;
   }
   [data-phase] {
-    padding: 3px 0 !important;
+    padding: clamp(3px, 0.9svh, 8px) 0 !important;
     line-height: 1.2;
   }
+  [data-phase] > span:first-child {
+    font-size: 0.75rem !important;
+  }
+  [data-phase] > span:last-child > span:first-child {
+    font-size: clamp(1rem, 2.3svh, 1.25rem) !important;
+  }
+  [data-frame] {
+    padding: clamp(12px, 1.9svh, 20px) !important;
+    gap: clamp(8px, 1.3svh, 16px) !important;
+    font-size: clamp(0.8125rem, 1.6svh, 0.9375rem) !important;
+  }
+  [data-frame] > div > div,
+  [data-frame] span:not([data-type-spec]) {
+    font-size: clamp(0.75rem, 1.55svh, 0.875rem) !important;
+  }
   [data-tools] {
-    gap: var(--space-3) !important;
+    gap: clamp(12px, 2svh, 24px) !important;
   }
   [data-tools] > div {
     gap: var(--space-2) !important;
   }
   [data-tools-grid] {
     grid-template-columns: repeat(auto-fit, minmax(44px, 1fr)) !important;
-    gap: var(--space-2) 4px !important;
+    gap: clamp(6px, 1.2svh, 14px) 4px !important;
   }
-  /* The blanket 12px span rule above would enlarge the tool names; keep them at their designed 10px. */
+  /* The blanket span rule above would resize the tool names; they scale on their own, 10–12px. */
   [data-frame] [data-tool] > span:last-child {
-    font-size: 10px !important;
+    font-size: clamp(10px, 1.3svh, 12px) !important;
   }
 }
 /* Short phones: the six steps read as two columns of three (01–03 | 04–06) instead of one tall
    column, which is what buys the panel enough height to fit without clipping. */
-@media (max-width: 720px) and (max-height: 780px) {
+@media (max-width: 720px) and (max-height: 760px) {
   [data-phases] > ol {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: repeat(3, auto);
