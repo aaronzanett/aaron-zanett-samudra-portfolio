@@ -9,8 +9,30 @@ import { LOADING_DONE_EVENT } from "@/lib/loading";
 /** Tablets and phones (by width or by touch) keep the browser's own scrolling. */
 const NATIVE_SCROLL_QUERY = "(max-width: 1024px), (pointer: coarse)";
 
-/** Scene numbers (as in the header label) whose content keeps the browser's own scrolling on desktop too. */
-const NATIVE_SCROLL_SCENES = ["02", "04"];
+/**
+ * Scenes 02 and 04 (elements marked `data-native-scroll`) keep the browser's own scrolling on desktop
+ * too — but only for the first part of each one's pinned scroll range. Once its progress passes this
+ * fraction, smooth scrolling resumes, so the hand-off to the next scene is smooth rather than native
+ * all the way to the very end. Lower = smooth resumes earlier.
+ */
+const NATIVE_ZONE_END = 0.6;
+
+/**
+ * True while a marked element is in the native part of its pinned range. The range runs from its top
+ * reaching the header (progress 0) to its bottom reaching the viewport's bottom (progress 1, where the
+ * pin releases) — the same span the scene's own scroll animation uses.
+ */
+function inNativeScrollZone(): boolean {
+  const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--hdr")) || 0;
+  const pinnedHeight = window.innerHeight - headerHeight;
+  return Array.from(document.querySelectorAll("[data-native-scroll]")).some((el) => {
+    const rect = el.getBoundingClientRect();
+    const scrollLength = rect.height - pinnedHeight;
+    if (scrollLength <= 0) return false;
+    const progress = (headerHeight - rect.top) / scrollLength;
+    return progress >= 0 && progress < NATIVE_ZONE_END;
+  });
+}
 
 /**
  * Drives Lenis smooth scroll and keeps it in lockstep with GSAP's ticker so
@@ -40,9 +62,8 @@ export function useLenis(reducedMotion: boolean) {
         // leaving the scrollable range stale and the page unreachable past the old limit. <body> has
         // no fixed height, so its box tracks real content height and the observer fires correctly.
         content: document.body,
-        // Scenes 02 and 04 scroll natively on every screen: while one is the active scene (published
-        // by SceneProgressProvider on <html>), Lenis leaves wheel/touch input to the browser.
-        prevent: () => NATIVE_SCROLL_SCENES.includes(document.documentElement.dataset.scene ?? ""),
+        // Inside a native-scroll zone (see NATIVE_ZONE_END) Lenis leaves wheel/touch input to the browser.
+        prevent: inNativeScrollZone,
       });
 
       lenis.on("scroll", ScrollTrigger.update);

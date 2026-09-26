@@ -1272,7 +1272,7 @@ export function SceneProcessWork() {
 
       <div style={{ position: "relative" }}>
         <div ref={processMarker} aria-hidden="true" style={{ position: "absolute", left: 0, right: 0, top: 0, height: splitAt, pointerEvents: "none" }} />
-        <div ref={workMarker} aria-hidden="true" style={{ position: "absolute", left: 0, right: 0, top: splitAt, bottom: 0, pointerEvents: "none" }} />
+        <div ref={workMarker} data-native-scroll aria-hidden="true" style={{ position: "absolute", left: 0, right: 0, top: splitAt, bottom: 0, pointerEvents: "none" }} />
         <ProcessWorkTrack />
       </div>
     </>
