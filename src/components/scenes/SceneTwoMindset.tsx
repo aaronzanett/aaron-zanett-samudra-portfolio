@@ -72,13 +72,11 @@ export function SceneTwoMindset() {
     []
   );
 
-  // Inner crossfade: the remaining 88% of scroll is split across the 6 phase frames. Divided by 5.5
-  // rather than 6 so the last phase (Refine) holds for only half a phase's scroll before the pin
-  // releases — otherwise the scene lingers on its final step and hands off to Scene 03 late.
+  // Inner crossfade: the remaining 88% of scroll is split evenly across the 6 phase frames.
   useStagedScrub({
     trackRef: sectionRef,
     targetRef: pinRef,
-    thresholds: [1, 2, 3, 4, 5].map((k) => 0.12 + (k / 5.5) * 0.88),
+    thresholds: [1, 2, 3, 4, 5].map((k) => 0.12 + (k / 6) * 0.88),
     vars: PHASE_VARS,
     reducedMotion,
     onStageCommit: onPhaseCommit,
