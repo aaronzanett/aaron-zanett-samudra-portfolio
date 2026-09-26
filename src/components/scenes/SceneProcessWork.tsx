@@ -54,7 +54,29 @@ const CAM = [
   { p: 0.475, x: 880, y: 1700 },
 ];
 
+// The design's track is 2560vh, with the process (Scene 03) taking the first SPLIT of it and the work
+// showcase (Scene 04) the rest. EXTRA_SHOWCASE_VH lengthens only the showcase — each project's slideshow
+// dwells ~20% longer — by adding scroll to the end of the track; designProgress() below maps the real
+// scroll back onto the design's own 0–1 progress so every timing in this file stays exactly as designed.
+const BASE_TRACK_VH = 2560;
+const EXTRA_SHOWCASE_VH = 260;
+const TRACK_VH = BASE_TRACK_VH + EXTRA_SHOWCASE_VH;
+
 const SPLIT = 0.48;
+
+/**
+ * Design progress (0–1) for `scrolled` px into the track. The process part keeps its original scroll
+ * length; the showcase part is stretched by the extra track.
+ */
+function designProgress(scrolled: number, trackHeight: number, stageHeight: number): number {
+  const viewportPx = trackHeight / (TRACK_VH / 100);
+  const baseSpan = (BASE_TRACK_VH / 100) * viewportPx - stageHeight; // the design's own scroll length
+  const extra = (EXTRA_SHOWCASE_VH / 100) * viewportPx;
+  const splitPx = SPLIT * baseSpan;
+  if (baseSpan <= 0) return 0;
+  if (scrolled <= splitPx) return clamp01(scrolled / baseSpan);
+  return clamp01(SPLIT + ((scrolled - splitPx) / ((1 - SPLIT) * baseSpan + extra)) * (1 - SPLIT));
+}
 const HOLD = 0.03;
 const TYPE_MS = 2000;
 const SHOT_MS = 300;
@@ -278,8 +300,7 @@ class ProcessWorkTrack extends React.Component<TrackProps, State> {
         fr.style.transform = prev;
       }
       const vh = (sr && sr.height) || window.innerHeight;
-      const span = tr.height - vh;
-      const p = clamp01(span > 0 ? -tr.top / span : 0);
+      const p = designProgress(-tr.top, tr.height, vh);
       const next: Partial<State> = {};
       if (sr && sr.width && (Math.abs(sr.width - this.state.vw) > 1 || Math.abs(sr.height - this.state.vh) > 1)) {
         next.vw = sr.width;
@@ -689,7 +710,7 @@ class ProcessWorkTrack extends React.Component<TrackProps, State> {
 
     return {
       sceneLabel: labels[li],
-      trackStyle: { position: "relative", width: "100%", height: (this.props.scrollLength ?? 2560) + "vh" } as CSSProperties,
+      trackStyle: { position: "relative", width: "100%", height: (this.props.scrollLength ?? TRACK_VH) + "vh" } as CSSProperties,
       worldStyle: {
         position: "absolute",
         left: 0,
@@ -1247,7 +1268,9 @@ export function SceneProcessWork() {
   useRegisterScene(processMarker, "Scene 03 — The Process");
   useRegisterScene(workMarker, "Scene 04 — The Work");
 
-  const splitAt = "calc((100% - 100vh + var(--hdr, 73px)) * 0.48)";
+  // Where the label flips 03 → 04: the design's split, measured over the design's own scroll length
+  // (the track before the showcase's extra scroll was added), so it lands where the content changes.
+  const splitAt = `calc((${BASE_TRACK_VH}vh - 100vh + var(--hdr, 73px)) * ${SPLIT})`;
 
   return (
     <>
