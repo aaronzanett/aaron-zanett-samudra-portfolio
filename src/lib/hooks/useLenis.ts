@@ -10,11 +10,17 @@ import { LOADING_DONE_EVENT } from "@/lib/loading";
 const NATIVE_SCROLL_QUERY = "(max-width: 1024px), (pointer: coarse)";
 
 /**
- * Scenes 02 and 04 (elements marked `data-native-scroll`) keep the browser's own scrolling on desktop
- * too — but only for the first part of each one's pinned scroll range. Once its progress passes the end
- * fraction, smooth scrolling resumes, so the hand-off to the next scene is smooth rather than native
- * all the way to the very end. The marker's value overrides this default per scene (lower = smooth
- * resumes earlier).
+ * WHERE EACH SCROLL MODE APPLIES (desktop; tablets and phones are always standard scroll):
+ *
+ *   Standard (browser) scroll — the first part of Scenes 02 and 04:
+ *     Scene 02  from its top reaching the header (0) to 70% of its pinned range
+ *     Scene 04  from its top reaching the header (0) to 60% of its pinned range
+ *   Smooth (Lenis) scroll — everywhere else:
+ *     Scene 01, the rest of Scene 02, Scene 03, the rest of Scene 04, Scene 05, Scene 06.
+ *
+ * Elements marked `data-native-scroll` are the standard-scroll scenes; the attribute's value is the end
+ * of that scene's standard zone as a fraction of its pinned range (0.7 for Scene 02; Scene 04 uses this
+ * default). The mode is a pure function of scroll position, so it is identical scrolling down or up.
  */
 const DEFAULT_NATIVE_ZONE_END = 0.6;
 
@@ -53,21 +59,16 @@ export function useLenis(reducedMotion: boolean) {
     let teardown: (() => void) | null = null;
 
     const enable = () => {
-      // Which scroller currently owns wheel/touch input. It only changes while Lenis has no smooth
-      // animation in flight: flipping mid-glide leaves Lenis's tween still calling scrollTo while the
-      // browser scrolls natively, and the two fight over the position (the jerk at the hand-off). Waiting
-      // for the glide to settle makes the switch invisible; when leaving native scroll there is nothing
-      // in flight (Lenis re-syncs to the real position on native scroll), so that flip is immediate.
-      let nativeOwnsScroll = false;
-      let lastEvaluated = 0;
-      const decideOwner = () => {
-        // Lenis asks once per node along the event path; answer once per event.
+      // Lenis asks `prevent` once per node along the event path; answer once per event.
+      let lastAnswerAt = 0;
+      let lastAnswer = false;
+      const inStandardZone = () => {
         const now = performance.now();
-        if (now - lastEvaluated < 8) return nativeOwnsScroll;
-        lastEvaluated = now;
-        const wantsNative = inNativeScrollZone();
-        if (wantsNative !== nativeOwnsScroll && lenis.isScrolling !== "smooth") nativeOwnsScroll = wantsNative;
-        return nativeOwnsScroll;
+        if (now - lastAnswerAt > 4) {
+          lastAnswer = inNativeScrollZone();
+          lastAnswerAt = now;
+        }
+        return lastAnswer;
       };
 
       const lenis: Lenis = new Lenis({
@@ -81,11 +82,19 @@ export function useLenis(reducedMotion: boolean) {
         // leaving the scrollable range stale and the page unreachable past the old limit. <body> has
         // no fixed height, so its box tracks real content height and the observer fires correctly.
         content: document.body,
-        // Inside a native-scroll zone Lenis leaves wheel/touch input to the browser (see decideOwner).
-        prevent: decideOwner,
+        // Inside a standard-scroll zone Lenis leaves wheel/touch input to the browser.
+        prevent: inStandardZone,
       });
 
-      lenis.on("scroll", ScrollTrigger.update);
+      lenis.on("scroll", () => {
+        ScrollTrigger.update();
+        // A smooth glide that carries the page into a standard-scroll zone is cut off right at its edge
+        // (and the input from then on belongs to the browser). Without this the glide keeps calling
+        // scrollTo through the zone, so the scene stays smooth in whichever direction it was entered.
+        if (lenis.isScrolling === "smooth" && inNativeScrollZone()) {
+          lenis.scrollTo(window.scrollY, { immediate: true, force: true });
+        }
+      });
 
       // The loading screen locks scrolling; Lenis would otherwise still honour wheel input.
       if (document.documentElement.hasAttribute("data-loading")) lenis.stop();
