@@ -24,8 +24,10 @@ export function SceneOneIdea() {
     thresholds: [0.19, 0.46, 0.72],
     vars: STAGE_VARS,
     reducedMotion,
-    // Slower than the hook's default so the view switches read more calmly.
-    tween: { perStage: 0.5, max: 0.9 },
+    // Slower than the hook's default so the view switches read more calmly on larger screens; on a
+    // phone that same delay after each swipe reads as lag, so it keeps the hook's default there.
+    // (Only read inside the hook's effect, so it never affects the server-rendered markup.)
+    tween: typeof window !== "undefined" && window.matchMedia("(max-width: 720px)").matches ? undefined : { perStage: 0.5, max: 0.9 },
   });
 
   const stageStyle = (varName: string, hidden: boolean) =>
@@ -45,7 +47,7 @@ export function SceneOneIdea() {
       ref={sectionRef}
       aria-labelledby="s1-h"
       className="relative"
-      style={{ height: reducedMotion ? "auto" : "460vh" }}
+      style={{ height: reducedMotion ? "auto" : "var(--s1-track)" }}
     >
       <div
         ref={pinRef}
@@ -57,7 +59,7 @@ export function SceneOneIdea() {
         style={
           reducedMotion
             ? undefined
-            : { position: "sticky", top: "var(--hdr)", height: "calc(100vh - var(--hdr))" }
+            : { position: "sticky", top: "var(--hdr)", height: "calc(100svh - var(--hdr))" }
         }
       >
         <div className="mb-(--space-6) flex items-baseline justify-between border-t border-ink-900 pt-(--space-2)">

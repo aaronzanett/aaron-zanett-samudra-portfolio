@@ -83,14 +83,14 @@ export function SceneTwoMindset() {
   });
 
   return (
-    <section ref={sectionRef} aria-labelledby="s2-h" style={{ height: reducedMotion ? "auto" : "760vh", position: "relative" }}>
+    <section ref={sectionRef} aria-labelledby="s2-h" style={{ height: reducedMotion ? "auto" : "var(--s2-track)", position: "relative" }}>
       <div
         ref={pinRef}
         data-pin
         style={{
           position: reducedMotion ? "static" : "sticky",
           top: "var(--hdr, 58px)",
-          height: reducedMotion ? "auto" : "calc(100vh - var(--hdr, 58px))",
+          height: reducedMotion ? "auto" : "calc(100svh - var(--hdr, 58px))",
           boxSizing: "border-box",
           display: "grid",
           gridTemplateRows: reducedMotion ? undefined : "auto minmax(0, 1fr)",
@@ -524,7 +524,7 @@ function ToolsFrame() {
               <div data-tools-rule={gi + 1} aria-hidden="true" style={{ height: 1, background: "var(--ink-900)" }} />
               <span style={label}>{group.title}</span>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(64px, 1fr))", gap: "var(--space-3) var(--space-2)" }}>
+            <div data-tools-grid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(64px, 1fr))", gap: "var(--space-3) var(--space-2)" }}>
               {group.items.map((tool, ti) => {
                 const delay = (groupOffset(gi) + ti) * 55;
                 return (

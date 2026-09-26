@@ -81,11 +81,13 @@ export function SiteHeader() {
         progress > 0 ? "rounded-t-none" : "rounded-t-(--radius-page)"
       }`}
     >
-      <div className="flex flex-wrap items-baseline justify-between gap-(--space-5)">
+      {/* Row gap stays small: when the header wraps on a phone, 24px between lines would eat a
+          quarter of a small screen that the pinned scenes below need. */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-(--space-5) gap-y-(--space-2)">
         <h1 className="m-0 font-grotesk text-[clamp(1.0625rem,1.6vw,1.375rem)] leading-none font-semibold [letter-spacing:-0.02em]">
           Aaron Zanett Samudra
         </h1>
-        <div className="flex flex-wrap items-baseline gap-(--space-5) text-[length:var(--type-label)] font-bold uppercase [letter-spacing:var(--type-label-tracking)]">
+        <div className="flex flex-wrap items-baseline gap-x-(--space-5) gap-y-(--space-2) text-[length:var(--type-label)] font-bold uppercase [letter-spacing:var(--type-label-tracking)]">
           <span>Frontend Developer</span>
           <span
             ref={wrapRef}
