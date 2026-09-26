@@ -956,12 +956,12 @@ a:hover {
    take a screen-plus of finger travel and scrolling reads as sluggish. */
 :root {
   --s1-track: 460vh;
-  --s2-track: 760vh;
+  --s2-track: 400vh;
 }
 @media (max-width: 720px) {
   :root {
     --s1-track: 340vh;
-    --s2-track: 560vh;
+    --s2-track: 440vh;
   }
 }
 

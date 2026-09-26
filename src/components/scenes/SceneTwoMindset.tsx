@@ -83,10 +83,11 @@ export function SceneTwoMindset() {
     onStageCommit: onPhaseCommit,
   });
 
-  // Smooth-scroll stop points, so one flick can't carry the page past the next slide: the scene's start
-  // (intro), the middle of each phase's stretch of scroll, and the end (where the pin releases).
-  // Progress runs over the same span as the scrubs above (section top → section bottom at the
-  // viewport's top/bottom).
+  // Smooth-scroll stop points, so one hard flick can't carry the page past the next slide: the middle of
+  // each slide's stretch of scroll (the intro plus the six phases). Deliberately no stop at the scene's
+  // start or end, so slow scrolling — and the way in and out of the scene, in either direction — is
+  // never caught on one. Progress runs over the same span as the scrubs above (section top → section
+  // bottom at the viewport's top/bottom).
   useEffect(() => {
     if (reducedMotion) return;
     return registerScrollStops(() => {
@@ -96,8 +97,9 @@ export function SceneTwoMindset() {
       const top = rect.top + window.scrollY;
       const length = rect.height - window.innerHeight;
       if (length <= 0) return [];
+      const introMid = 0.06;
       const phaseMids = [0, 1, 2, 3, 4, 5].map((k) => 0.12 + ((k + 0.5) / 6) * 0.88);
-      return [0, ...phaseMids, 1].map((progress) => top + progress * length);
+      return [introMid, ...phaseMids].map((progress) => top + progress * length);
     });
   }, [reducedMotion]);
 

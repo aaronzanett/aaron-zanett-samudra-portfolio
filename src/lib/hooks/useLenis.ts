@@ -14,11 +14,22 @@ const NATIVE_SCROLL_QUERY = "(max-width: 1024px), (pointer: coarse)";
 const STOP_TOLERANCE = 2;
 /** A gesture is over once the wheel has been quiet this long (trackpad momentum keeps events coming). */
 const GESTURE_QUIET_MS = 150;
+/**
+ * Stops only engage for a hard flick: a gesture must have travelled at least this many px (summed wheel
+ * delta) before the next stop can cap it. Slow or small scrolling — a notch at a time, a gentle drag —
+ * never reaches it, so it flows straight through the slides with nothing to catch on.
+ */
+const MIN_GESTURE_TRAVEL = 500;
+/** Seconds the glide to a stop takes — short, so arriving on a slide feels immediate, not dragged out. */
+const STOP_GLIDE_SECONDS = 0.5;
+/** Same curve as the page's normal smooth scroll, so a glide to a stop feels like the rest of the site. */
+const SMOOTH_EASING = (t: number) => 1 - Math.pow(1 - t, 3);
 
 /**
  * Makes smooth scrolling come to rest at the registered scroll stops (see scrollStops.ts) instead of
- * letting one hard flick fly past several slides. Wheel input is clamped so a glide can travel at most
- * to the next stop in its direction; once it arrives, the rest of that same gesture (more notches or
+ * letting one hard flick fly past several slides. Once a gesture is a hard flick (see
+ * MIN_GESTURE_TRAVEL), wheel input is clamped so a glide can travel at most to the next stop in its
+ * direction; once it arrives, the rest of that same gesture (more notches or
  * trackpad momentum) is ignored until the wheel goes quiet or reverses. Runs after Lenis's own wheel
  * handler (registered later on the same target), so it can correct the target Lenis just set.
  */
@@ -28,15 +39,22 @@ function attachScrollStops(lenis: Lenis): () => void {
   let travellingTo: number | null = null; // the stop currently being glided to
   let travelDirection = 0;
   let quietTimer = 0;
+  let gestureTravel = 0; // summed |wheel delta| of the current gesture
+  let lastDirection = 0;
 
   const onWheel = (event: WheelEvent) => {
     if (lenis.isStopped) return;
     const direction = Math.sign(event.deltaY);
     if (direction === 0) return;
 
+    if (direction !== lastDirection) gestureTravel = 0; // reversing starts a new gesture
+    lastDirection = direction;
+    gestureTravel += Math.abs(event.deltaY);
+
     window.clearTimeout(quietTimer);
     quietTimer = window.setTimeout(() => {
       heldAt = null;
+      gestureTravel = 0;
       // A glide that ended short of its stop for some other reason must not keep clamping later input.
       if (travellingTo !== null && lenis.isScrolling !== "smooth") travellingTo = null;
     }, GESTURE_QUIET_MS);
@@ -58,6 +76,7 @@ function attachScrollStops(lenis: Lenis): () => void {
           ? (stops.find((stop) => stop > position + STOP_TOLERANCE) ?? null)
           : ([...stops].reverse().find((stop) => stop < position - STOP_TOLERANCE) ?? null);
       if (next === null) return;
+      if (gestureTravel < MIN_GESTURE_TRAVEL) return; // not a hard flick: leave it to Lenis, uncapped
       const target = lenis.targetScroll;
       const wouldReachOrPass = direction > 0 ? target >= next : target <= next;
       if (!wouldReachOrPass) return; // a short flick that stops on its own before the next stop
@@ -68,7 +87,9 @@ function attachScrollStops(lenis: Lenis): () => void {
     // Every event of a gesture that is heading for a stop is pinned to it. (Non-programmatic, so
     // Lenis keeps the stop as its target instead of following the moving position — otherwise the
     // small tail events of trackpad momentum look like a short flick and the glide dies early.)
-    lenis.scrollTo(travellingTo, { force: true, programmatic: false });
+    // An explicit duration and easing are required: with `programmatic: false` Lenis has none by default
+    // and would complete the animation in a single frame, teleporting the page to the stop.
+    lenis.scrollTo(travellingTo, { force: true, programmatic: false, duration: STOP_GLIDE_SECONDS, easing: SMOOTH_EASING });
   };
 
   // Arrival: the glide has reached its stop, so the remainder of the gesture is held.
@@ -109,7 +130,7 @@ export function useLenis(reducedMotion: boolean) {
     const enable = () => {
       const lenis = new Lenis({
         duration: 1.1,
-        easing: (t) => 1 - Math.pow(1 - t, 3),
+        easing: SMOOTH_EASING,
         smoothWheel: true,
         // <html> is height:100% (see layout.tsx's h-full) so its own box always equals the viewport —
         // it never resizes when page content does. Lenis's autoResize watches `content` with a
