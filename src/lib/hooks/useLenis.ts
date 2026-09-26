@@ -37,33 +37,38 @@ function attachScrollStops(lenis: Lenis): () => void {
     window.clearTimeout(quietTimer);
     quietTimer = window.setTimeout(() => {
       heldAt = null;
+      // A glide that ended short of its stop for some other reason must not keep clamping later input.
+      if (travellingTo !== null && lenis.isScrolling !== "smooth") travellingTo = null;
     }, GESTURE_QUIET_MS);
 
     if (heldAt !== null && direction !== heldDirection) heldAt = null; // reversing starts a new gesture
     if (travellingTo !== null && direction !== travelDirection) travellingTo = null;
 
     if (heldAt !== null) {
-      lenis.scrollTo(heldAt, { force: true }); // still the same gesture: stay put
+      // Same gesture, already at rest on the stop: stay put.
+      lenis.scrollTo(heldAt, { immediate: true, force: true });
       return;
     }
 
-    let next = travellingTo;
-    if (next === null) {
+    if (travellingTo === null) {
       const stops = getScrollStops();
       const position = lenis.animatedScroll;
-      next =
+      const next =
         direction > 0
           ? (stops.find((stop) => stop > position + STOP_TOLERANCE) ?? null)
           : ([...stops].reverse().find((stop) => stop < position - STOP_TOLERANCE) ?? null);
+      if (next === null) return;
+      const target = lenis.targetScroll;
+      const wouldReachOrPass = direction > 0 ? target >= next : target <= next;
+      if (!wouldReachOrPass) return; // a short flick that stops on its own before the next stop
+      travellingTo = next;
+      travelDirection = direction;
     }
-    if (next === null) return;
 
-    const target = lenis.targetScroll;
-    const wouldReachOrPass = direction > 0 ? target >= next : target <= next;
-    if (!wouldReachOrPass) return; // a short flick that stops on its own before the next stop
-    travellingTo = next;
-    travelDirection = direction;
-    if (target !== next) lenis.scrollTo(next, { force: true });
+    // Every event of a gesture that is heading for a stop is pinned to it. (Non-programmatic, so
+    // Lenis keeps the stop as its target instead of following the moving position — otherwise the
+    // small tail events of trackpad momentum look like a short flick and the glide dies early.)
+    lenis.scrollTo(travellingTo, { force: true, programmatic: false });
   };
 
   // Arrival: the glide has reached its stop, so the remainder of the gesture is held.
@@ -73,8 +78,6 @@ function attachScrollStops(lenis: Lenis): () => void {
       heldAt = travellingTo;
       heldDirection = travelDirection;
       travellingTo = null;
-    } else if (lenis.isScrolling !== "smooth") {
-      travellingTo = null; // the glide was interrupted (e.g. a scrollbar drag); don't stay clamped to it
     }
   });
 
