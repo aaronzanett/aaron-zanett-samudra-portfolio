@@ -11,11 +11,12 @@ const NATIVE_SCROLL_QUERY = "(max-width: 1024px), (pointer: coarse)";
 
 /**
  * Scenes 02 and 04 (elements marked `data-native-scroll`) keep the browser's own scrolling on desktop
- * too — but only for the first part of each one's pinned scroll range. Once its progress passes this
+ * too — but only for the first part of each one's pinned scroll range. Once its progress passes the end
  * fraction, smooth scrolling resumes, so the hand-off to the next scene is smooth rather than native
- * all the way to the very end. Lower = smooth resumes earlier.
+ * all the way to the very end. The marker's value overrides this default per scene (lower = smooth
+ * resumes earlier).
  */
-const NATIVE_ZONE_END = 0.6;
+const DEFAULT_NATIVE_ZONE_END = 0.6;
 
 /**
  * True while a marked element is in the native part of its pinned range. The range runs from its top
@@ -30,7 +31,8 @@ function inNativeScrollZone(): boolean {
     const scrollLength = rect.height - pinnedHeight;
     if (scrollLength <= 0) return false;
     const progress = (headerHeight - rect.top) / scrollLength;
-    return progress >= 0 && progress < NATIVE_ZONE_END;
+    const end = parseFloat(el.getAttribute("data-native-scroll") ?? "") || DEFAULT_NATIVE_ZONE_END;
+    return progress >= 0 && progress < end;
   });
 }
 
@@ -51,7 +53,24 @@ export function useLenis(reducedMotion: boolean) {
     let teardown: (() => void) | null = null;
 
     const enable = () => {
-      const lenis = new Lenis({
+      // Which scroller currently owns wheel/touch input. It only changes while Lenis has no smooth
+      // animation in flight: flipping mid-glide leaves Lenis's tween still calling scrollTo while the
+      // browser scrolls natively, and the two fight over the position (the jerk at the hand-off). Waiting
+      // for the glide to settle makes the switch invisible; when leaving native scroll there is nothing
+      // in flight (Lenis re-syncs to the real position on native scroll), so that flip is immediate.
+      let nativeOwnsScroll = false;
+      let lastEvaluated = 0;
+      const decideOwner = () => {
+        // Lenis asks once per node along the event path; answer once per event.
+        const now = performance.now();
+        if (now - lastEvaluated < 8) return nativeOwnsScroll;
+        lastEvaluated = now;
+        const wantsNative = inNativeScrollZone();
+        if (wantsNative !== nativeOwnsScroll && lenis.isScrolling !== "smooth") nativeOwnsScroll = wantsNative;
+        return nativeOwnsScroll;
+      };
+
+      const lenis: Lenis = new Lenis({
         duration: 1.1,
         easing: (t) => 1 - Math.pow(1 - t, 3),
         smoothWheel: true,
@@ -62,8 +81,8 @@ export function useLenis(reducedMotion: boolean) {
         // leaving the scrollable range stale and the page unreachable past the old limit. <body> has
         // no fixed height, so its box tracks real content height and the observer fires correctly.
         content: document.body,
-        // Inside a native-scroll zone (see NATIVE_ZONE_END) Lenis leaves wheel/touch input to the browser.
-        prevent: inNativeScrollZone,
+        // Inside a native-scroll zone Lenis leaves wheel/touch input to the browser (see decideOwner).
+        prevent: decideOwner,
       });
 
       lenis.on("scroll", ScrollTrigger.update);
