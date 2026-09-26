@@ -83,7 +83,7 @@ export function SceneTwoMindset() {
   });
 
   return (
-    <section ref={sectionRef} data-native-scroll="0.3" aria-labelledby="s2-h" style={{ height: reducedMotion ? "auto" : "var(--s2-track)", position: "relative" }}>
+    <section ref={sectionRef} aria-labelledby="s2-h" style={{ height: reducedMotion ? "auto" : "var(--s2-track)", position: "relative" }}>
       <div
         ref={pinRef}
         data-pin
