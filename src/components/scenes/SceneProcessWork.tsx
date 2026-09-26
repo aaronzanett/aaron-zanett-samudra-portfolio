@@ -18,7 +18,8 @@
  *    running. Scroll still drives the camera, and no content is gated.
  */
 
-import React, { type CSSProperties, type ReactNode, useRef } from "react";
+import React, { type CSSProperties, type ReactNode, useEffect, useRef } from "react";
+import { registerScrollStops } from "@/lib/animation/scrollStops";
 import { useRegisterScene } from "@/lib/hooks/useSceneProgress";
 
 const clamp01 = (t: number) => (t < 0 ? 0 : t > 1 ? 1 : t);
@@ -1246,6 +1247,26 @@ export function SceneProcessWork() {
   const workMarker = useRef<HTMLDivElement>(null);
   useRegisterScene(processMarker, "Scene 03 — The Process");
   useRegisterScene(workMarker, "Scene 04 — The Work");
+
+  // Smooth-scroll stop points for Scene 04 so one flick can't carry the page past the next slide: the
+  // middle of each of the 20 shots (5 projects x 4, spaced exactly as the track's own math above
+  // spaces them) and the end of the track. Progress is measured the way ProcessWorkTrack measures
+  // it: track top over (track height - stage height).
+  useEffect(() => {
+    return registerScrollStops(() => {
+      const track = document.querySelector<HTMLElement>("[data-wf-track]");
+      const stage = document.querySelector<HTMLElement>("[data-wf-stage]");
+      if (!track || !stage) return [];
+      const rect = track.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const length = rect.height - stage.getBoundingClientRect().height;
+      if (length <= 0) return [];
+      const shots = PROJECTS.length * 4;
+      const shotSpan = (1 - TAIL - (SPLIT + GATE)) / shots;
+      const shotMids = Array.from({ length: shots }, (_, s) => SPLIT + GATE + (s + 0.5) * shotSpan);
+      return [...shotMids, 1].map((progress) => top + progress * length);
+    });
+  }, []);
 
   const splitAt = "calc((100% - 100vh + var(--hdr, 73px)) * 0.48)";
 

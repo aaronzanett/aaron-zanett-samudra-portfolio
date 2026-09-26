@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useRef, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, type CSSProperties } from "react";
 import { scene02Content as content } from "@/content/scene-02";
+import { registerScrollStops } from "@/lib/animation/scrollStops";
 import { useStagedScrub } from "@/lib/animation/useStagedScrub";
 import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
 import { useRegisterScene } from "@/lib/hooks/useSceneProgress";
@@ -81,6 +82,24 @@ export function SceneTwoMindset() {
     reducedMotion,
     onStageCommit: onPhaseCommit,
   });
+
+  // Smooth-scroll stop points, so one flick can't carry the page past the next slide: the scene's start
+  // (intro), the middle of each phase's stretch of scroll, and the end (where the pin releases).
+  // Progress runs over the same span as the scrubs above (section top → section bottom at the
+  // viewport's top/bottom).
+  useEffect(() => {
+    if (reducedMotion) return;
+    return registerScrollStops(() => {
+      const section = sectionRef.current;
+      if (!section) return [];
+      const rect = section.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const length = rect.height - window.innerHeight;
+      if (length <= 0) return [];
+      const phaseMids = [0, 1, 2, 3, 4, 5].map((k) => 0.12 + ((k + 0.5) / 6) * 0.88);
+      return [0, ...phaseMids, 1].map((progress) => top + progress * length);
+    });
+  }, [reducedMotion]);
 
   return (
     <section ref={sectionRef} aria-labelledby="s2-h" style={{ height: reducedMotion ? "auto" : "var(--s2-track)", position: "relative" }}>
