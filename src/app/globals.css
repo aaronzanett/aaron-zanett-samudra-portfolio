@@ -133,7 +133,7 @@ a:hover {
 /* --- Scene 02 — ported verbatim from the Claude Design export --- */
 
 [data-pin] {
-  height: calc(100dvh - var(--hdr, 58px)) !important;
+  height: calc(100svh - var(--hdr, 58px)) !important;
 }
 
 /* Panel 01 — Understand: nothing in the framewrap paints until the phases
@@ -956,12 +956,12 @@ a:hover {
    take a screen-plus of finger travel and scrolling reads as sluggish. */
 :root {
   --s1-track: 460vh;
-  --s2-track: 760vh;
+  --s2-track: 710vh;
 }
 @media (max-width: 720px) {
   :root {
     --s1-track: 340vh;
-    --s2-track: 560vh;
+    --s2-track: 525vh;
   }
 }
 

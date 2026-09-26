@@ -619,7 +619,9 @@ export function ScenePlayground() {
           }
         });
       },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.12 }
+      // Fires just before an item enters the viewport (the design waited until 12% of it was visible,
+      // 12% of a screen up from the bottom, so content was still arriving after the scroll had landed).
+      { rootMargin: "0px 0px 15% 0px", threshold: 0 }
     );
     items.forEach((el) => obs.observe(el));
     return () => {
