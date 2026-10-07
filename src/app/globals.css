@@ -1292,3 +1292,39 @@ html[data-hold-anim] [data-caret] {
   opacity: 0;
   transform: translateY(var(--off-y, 6px));
 }
+
+/* Call-to-action link (Scene 04's "View live preview" / "View GitHub"): the same filled ink button
+   the design uses elsewhere, inverting to an outline on hover and focus. Overrides the global link
+   underline and fade. */
+[data-cta] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  min-height: 40px;
+  box-sizing: border-box;
+  border: var(--hairline-ink);
+  border-radius: var(--radius-panel);
+  background: var(--ink-900);
+  color: var(--cream-100);
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background var(--dur-fast) var(--ease-editorial),
+    color var(--dur-fast) var(--ease-editorial);
+}
+[data-cta]:hover,
+[data-cta]:focus-visible {
+  opacity: 1;
+  background: transparent;
+  color: var(--ink-900);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-cta] {
+    transition: none;
+  }
+}

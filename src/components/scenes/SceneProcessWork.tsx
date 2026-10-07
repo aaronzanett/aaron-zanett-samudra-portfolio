@@ -92,6 +92,8 @@ interface Project {
   role: string;
   year: string;
   desc: string;
+  /** Live preview, opened from the project's call to action. */
+  href: string;
 }
 
 const PROJECTS: Project[] = [
@@ -101,6 +103,7 @@ const PROJECTS: Project[] = [
     role: "Full-stack",
     year: "2024",
     desc: "A pharmacy operating system — point of sale, prescriptions, stock and expiry, finance. Built end to end, from schema to interface.",
+    href: "https://apotek-pro.vercel.app/",
   },
   {
     key: "alhikmah",
@@ -108,6 +111,7 @@ const PROJECTS: Project[] = [
     role: "Frontend",
     year: "2024",
     desc: "Public site and portals for a modern Islamic boarding school: admissions, guardian and student dashboards, billing and savings.",
+    href: "https://al-hikmah-aaronzanetts.vercel.app/",
   },
   {
     key: "zanscode",
@@ -115,6 +119,7 @@ const PROJECTS: Project[] = [
     role: "Frontend",
     year: "2025",
     desc: "Company site and internal OS for a software studio — service pages, product suite, and an operations dashboard behind one system.",
+    href: "https://zanscode.vercel.app/",
   },
   {
     key: "trimly",
@@ -122,6 +127,7 @@ const PROJECTS: Project[] = [
     role: "Frontend",
     year: "2026",
     desc: "Barbershop management across owner, staff and customer roles: booking, cashier, commission and multi-branch reporting.",
+    href: "https://trimly-aaronzanetts.vercel.app/",
   },
   {
     key: "wowrack",
@@ -129,8 +135,11 @@ const PROJECTS: Project[] = [
     role: "Frontend",
     year: "2026",
     desc: "Careers site and candidate portal — job listings, a long structured application flow, and applicant stage tracking.",
+    href: "https://wowrack-recruitment-portal.vercel.app/",
   },
 ];
+
+const GITHUB_HREF = "https://github.com/aaronzanett";
 
 const shotSrc = (key: string, j: number) => `/projects/${key}/${j + 1}.png`;
 
@@ -178,6 +187,16 @@ interface WorkVM {
   dots: { style: CSSProperties }[];
   shots: { style: CSSProperties }[];
   metaIn: number;
+  href: string;
+}
+
+/** Small up-right arrow marking a link that opens in a new tab. */
+function CtaArrow() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.25" aria-hidden="true">
+      <path d="M2 8 8 2M3.5 2H8v4.5" />
+    </svg>
+  );
 }
 
 /** The design system's Label (components/core/Label.jsx), default `span` / primary tone. */
@@ -640,6 +659,7 @@ class ProcessWorkTrack extends React.Component<TrackProps, State> {
         : []
       ).concat(shots.map((s) => ({ style: s.style }))),
       metaIn: descK,
+      href: pr.href,
     };
   }
 
@@ -746,9 +766,14 @@ class ProcessWorkTrack extends React.Component<TrackProps, State> {
           left: 0,
           right: 0,
           bottom: "clamp(26px,5vh,64px)",
+          zIndex: 2,
           display: "flex",
+          flexWrap: "wrap",
           justifyContent: "center",
-          pointerEvents: "none",
+          alignItems: "center",
+          gap: "10px 20px",
+          pointerEvents: a > 0.6 ? "auto" : "none",
+          visibility: a > 0 ? "visible" : "hidden",
           opacity: a,
           transform: "translateY(" + lerp(16, 0, a).toFixed(2) + "px)",
         } as CSSProperties;
@@ -804,6 +829,8 @@ class ProcessWorkTrack extends React.Component<TrackProps, State> {
         opacity: showIn * (1 - S(seg(mp, 0.975, 1))),
         transform: "translateY(" + (6 - 6 * showIn).toFixed(2) + "px)",
       } as CSSProperties,
+      // The project CTA is only reachable (and focusable) while the showcase is actually on screen.
+      ctaVisible: xf >= 1 && metaIn === 1,
       showcaseStyle: {
         position: "absolute",
         inset: 0,
@@ -817,7 +844,7 @@ class ProcessWorkTrack extends React.Component<TrackProps, State> {
         const metaW = narrow ? 0 : 264;
         const gap = narrow ? 24 : Math.min(58, Math.max(24, vw * 0.04));
         const availW = Math.min(1560, vw) - 2 * padX - metaW - (narrow ? 0 : gap);
-        const metaH = narrow ? 320 : 0;
+        const metaH = narrow ? 372 : 0;
         const availH = Math.max(120, vh - 2 * padY - metaH);
         const shotW = Math.max(160, Math.min(availW, (availH * 812) / 400));
         const fw = this.state.fw || 0;
@@ -1117,6 +1144,16 @@ class ProcessWorkTrack extends React.Component<TrackProps, State> {
               <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "clamp(24px,2.6vw,38px)", lineHeight: 1.1, color: "var(--text-primary)" }}>
                 And there&apos;s more.
               </span>
+              <a
+                href={GITHUB_HREF}
+                target="_blank"
+                rel="noreferrer noopener"
+                data-cta=""
+                aria-label="See more of Aaron's work on GitHub (opens in a new tab)"
+              >
+                View GitHub
+                <CtaArrow />
+              </a>
             </div>
 
             <div style={v.holdTopStyle}>
@@ -1184,6 +1221,19 @@ class ProcessWorkTrack extends React.Component<TrackProps, State> {
                     {work.dots.map((d, i) => (
                       <span key={i} style={d.style}></span>
                     ))}
+                  </div>
+                  <div style={{ marginTop: 10, visibility: v.ctaVisible ? "visible" : "hidden" }}>
+                    <a
+                      href={work.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      data-cta=""
+                      aria-label={`View live preview of ${work.name} (opens in a new tab)`}
+                      tabIndex={v.ctaVisible ? 0 : -1}
+                    >
+                      View live preview
+                      <CtaArrow />
+                    </a>
                   </div>
                 </div>
                 <div data-wf-frame="1" ref={this.frameRef} style={v.workFrameStyle}>
