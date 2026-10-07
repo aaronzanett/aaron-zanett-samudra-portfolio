@@ -767,6 +767,9 @@ a:hover {
 }
 [data-tool] {
   opacity: 0;
+  /* Own compositor layer per icon, so the 16 staggered fades are pure GPU opacity/transform and the
+     masked icons aren't re-rasterised on every frame of the reveal. */
+  will-change: opacity, transform;
 }
 [data-tools-rule] {
   transform: scaleX(0);

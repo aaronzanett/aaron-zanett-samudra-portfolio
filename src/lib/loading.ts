@@ -38,3 +38,30 @@ export function getPreloadImageUrls(): string[] {
 
 /** Font faces that are otherwise only fetched when first painted (italic display, bold grotesk). */
 export const FONT_LOADS = ['400 1em "Archivo"', '700 1em "Archivo"', 'italic 500 1em "Bodoni Moda"', '400 1em "Bodoni Moda"'];
+
+// Held for the life of the page: a decoded bitmap that nothing references can be evicted again.
+const warmedIcons: HTMLImageElement[] = [];
+
+/**
+ * Decodes the Build & Tools icons ahead of time. Their first paint happens inside the panel's staggered
+ * reveal; decoding sixteen images there is what made the animation stutter, so it is done up front,
+ * from the (already preloaded) cache, while the page is idle.
+ */
+export function warmToolIcons(): void {
+  const urls = [
+    ...Object.values(LOCAL_TOOL_ICONS),
+    ...Object.values(MASK_TOOL_ICONS).map((m) => m.url),
+    ...scene02Content.tools.groups
+      .flatMap((group) => group.items)
+      .map((tool) => tool.icon)
+      .filter((icon) => !(icon in LOCAL_TOOL_ICONS) && !(icon in MASK_TOOL_ICONS))
+      .map(DEVICON),
+  ];
+  urls.forEach((src) => {
+    const img = new Image();
+    img.decoding = "async";
+    img.src = src;
+    img.decode().catch(() => undefined); // a missing icon must not matter here
+    warmedIcons.push(img);
+  });
+}

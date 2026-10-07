@@ -6,7 +6,7 @@ import { registerScrollStops } from "@/lib/animation/scrollStops";
 import { useStagedScrub } from "@/lib/animation/useStagedScrub";
 import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
 import { useRegisterScene } from "@/lib/hooks/useSceneProgress";
-import { LOCAL_TOOL_ICONS, MASK_TOOL_ICONS } from "@/lib/loading";
+import { LOCAL_TOOL_ICONS, MASK_TOOL_ICONS, warmToolIcons } from "@/lib/loading";
 
 const PHASE_VARS = ["--f1", "--f2", "--f3", "--f4", "--f5", "--f6"];
 // Reveal-once attribute per phase index — Understand (0) has no gated micro-animation, just the crossfade.
@@ -43,6 +43,11 @@ export function SceneTwoMindset() {
   const reducedMotion = useReducedMotion();
 
   useRegisterScene(sectionRef, "Scene 02 — The Mindset");
+
+  // Decode the Build & Tools icons now, while idle, so the panel's staggered reveal doesn't have to.
+  useEffect(() => {
+    warmToolIcons();
+  }, []);
 
   const onOuterCommit = useCallback((index: number) => {
     // index 1 = the phases group (--g) becoming current — this is when panel
@@ -564,10 +569,10 @@ function ToolsFrame() {
                         />
                       ) : LOCAL_TOOL_ICONS[tool.icon] ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={LOCAL_TOOL_ICONS[tool.icon]} alt="" width={26} height={26} loading="lazy" style={{ width: 26, height: 26, objectFit: "contain" }} />
+                        <img src={LOCAL_TOOL_ICONS[tool.icon]} alt="" width={26} height={26} decoding="async" style={{ width: 26, height: 26, objectFit: "contain" }} />
                       ) : (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={TOOL_ICON_SRC[tool.icon]} alt="" width={26} height={26} loading="lazy" style={{ width: 26, height: 26, objectFit: "contain" }} />
+                        <img src={TOOL_ICON_SRC[tool.icon]} alt="" width={26} height={26} decoding="async" style={{ width: 26, height: 26, objectFit: "contain" }} />
                       )}
                     </span>
                     <span style={{ fontSize: 10, lineHeight: 1.2, fontWeight: 700, letterSpacing: "0.04em", color: "var(--text-secondary)" }}>{tool.name}</span>
